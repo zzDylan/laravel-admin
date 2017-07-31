@@ -41,4 +41,9 @@ class AuthController extends Controller {
         return redirect('admin');
     }
     
+    public function test(){
+        $admin = Auth::guard('admin')->user();
+        dd($admin->roles);
+    }
+    
 }

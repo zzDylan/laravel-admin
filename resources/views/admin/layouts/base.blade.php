@@ -589,7 +589,7 @@ License: You must have a valid license purchased only from themeforest(the above
                     <!-- BEGIN PAGE BREADCRUMB -->
                     <ul class="page-breadcrumb breadcrumb">
                         <li>
-                            <a href="index.html">Home</a>
+                            <a href="/admin">Home</a>
                             <i class="fa fa-circle"></i>
                         </li>
                         <li>
