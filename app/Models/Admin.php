@@ -11,11 +11,11 @@ class Admin extends Authenticatable
     protected $table = 'admin_users';
     
     public function roles(){
-        return $this->belongsToMany('App\Models\Role', 'admin_role_users', 'user_id', 'role_id');
+        return $this->belongsToMany(config('admin.database.roles_model'), config('admin.database.role_users_table'), 'user_id', 'role_id');
     }
     
     public function permissions() {
-        return $this->belongsToMany('App\Models\Permission', 'admin_user_permissions', 'user_id', 'permission_id');
+        return $this->belongsToMany(config('admin.database.permissions_table'), config('admin.database.user_permissions_table'), 'user_id', 'permission_id');
     }
     
     public function inRole($slug){
