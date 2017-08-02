@@ -1,6 +1,4 @@
-@if(!Request::header('X-PJAX')) 
-    @extends('admin.layouts.base')
-@endif
+@extends('admin.layouts.base')
 @section('content')
 <div class="row">
     <div class="col-md-6">
@@ -11,7 +9,7 @@
                     <button type="button" class="btn red btn-outline sbold uppercase" data-action="collapse-all"><i class="fa fa-minus"></i>收起</button>
                 </span>
                 <button id="save" type="button" class="btn blue btn-outline sbold uppercase" data-action="collapse-all" ><i class="fa fa-save"></i>保存</button>
-                <button type="button" onclick="javascript:location.reload()" class="btn yellow btn-outline sbold uppercase" data-action="collapse-all"><i class="fa fa-refresh"></i>刷新</button>
+                <button id="refresh" type="button" class="btn yellow btn-outline sbold uppercase" data-action="collapse-all"><i class="fa fa-refresh"></i>刷新</button>
             </div>
             <div class="portlet-body ">
                 <div class="dd" id="nestable_list_1">
@@ -27,32 +25,9 @@
                     <i class="icon-bubble font-red-mint"></i>
                     <span class="caption-subject font-red-mint sbold">添加菜单</span>
                 </div>
-                <!--                <div class="actions">
-                                    <div class="btn-group">
-                                        <a class="btn dark btn-outline btn-circle btn-sm" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"> Actions
-                                            <i class="fa fa-angle-down"></i>
-                                        </a>
-                                        <ul class="dropdown-menu pull-right">
-                                            <li>
-                                                <a href="javascript:;"> Option 1</a>
-                                            </li>
-                                            <li class="divider"> </li>
-                                            <li>
-                                                <a href="javascript:;">Option 2</a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:;">Option 3</a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:;">Option 4</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>-->
             </div>
             <div class="portlet-body">
-                BEGIN FORM
-                <form id="addForm" method="post" action="/admin/menu" class="form-horizontal">
+                <form data-pjax id="addForm" method="post" action="/admin/menu" class="form-horizontal">
                     <div class="form-body">
                         {{ csrf_field() }}
                         <div class="form-group @if($errors->has('parent_id')) has-error  @endif">
@@ -97,7 +72,7 @@
                             <label class="col-md-3 control-label">路径</label>
                             <div class="col-md-8">
                                 @if($errors->has('uri'))
-                                    <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$errors->first('uri')}}</label>
+                                <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$errors->first('uri')}}</label>
                                 @endif
                                 <div class="input-group">
                                     <span class="input-group-addon">
@@ -113,7 +88,7 @@
                                 @if($errors->has('roles'))
                                 <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$errors->first('roles')}}</label>
                                 @endif
-                                <select name="roles[]" class="form-control select2" multiple>
+                                <select style="width: 100%;" id="roles" name="roles[]" class="form-control select2" multiple>
                                     @php
                                     $roleModel = config('admin.database.roles_model');
                                     @endphp
@@ -127,13 +102,12 @@
                     <div class="form-actions">
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">
-                                <button type="submit" class="btn btn-circle green">提交</button>
+                                <button id="add_button" type="submit" class="btn btn-circle green">提交</button>
                                 <button type="reset" class="btn btn-circle grey-salsa btn-outline">取消</button>
                             </div>
                         </div>
                     </div>
                 </form>
-                END FORM
             </div>
         </div>
     </div>
@@ -141,7 +115,7 @@
 @endsection
 @section('otherjs')
 <script>
-//    $('.icon').iconpicker();
+    //$('.icon').iconpicker();
     $('.dd').nestable({/* config options */});
     $('.dd').on('change', function () {
         $("#save").attr('disabled', false);
@@ -150,14 +124,13 @@
         var nestable = $('.dd').nestable('serialize');
         console.log(nestable);
         $.post('/admin/menu/nestable', {"nestable": nestable}, function (res) {
-            if (res.status == 0) {
-                layer.msg(res.msg, {icon: 5});
-            } else {
-                layer.msg(res.msg, {icon: 1}, function () {
-                    location.href = '/admin/menu';
-                });
-            }
+            $.pjax.reload('#pjax-container');
+            toastr.success('保存成功 !');
         });
+    });
+    $("#refresh").click(function () {
+        $.pjax.reload('#pjax-container');
+        toastr.success('刷新成功 !');
     });
     $('#nestable-menu').on('click', function (e)
     {
@@ -182,5 +155,12 @@
             }
         });
     });
+    $(document).on('submit', 'form[data-pjax]', function (event) {
+        $.pjax.submit(event, '#pjax-container', {scrollTo: false})
+    })
+    $(document).on('pjax:success', function () {
+        console.log('test');
+    })
+
 </script>
 @endsection

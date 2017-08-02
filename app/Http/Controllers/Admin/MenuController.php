@@ -9,12 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class MenuController extends Controller {
 
-    public function test3(){
-        $menuModel = config('admin.database.menu_model');
-        $menus = $menuModel::where('parent_id', 0)->get();
-        return view('admin.test3', ['menus' => $menus]);
-    }
-    
     /**
      * Display a listing of the resource.
      *
@@ -66,7 +60,6 @@ class MenuController extends Controller {
         admin_toastr('success', '添加成功');
         return redirect('/admin/menu');
     }
-
 
     /**
      * Show the form for editing the specified resource.

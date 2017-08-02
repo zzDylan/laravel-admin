@@ -1,3 +1,4 @@
+@if(!Request::header('X-PJAX'))
 <!DOCTYPE html>
 <!-- 
 Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.7
@@ -47,7 +48,9 @@ License: You must have a valid license purchased only from themeforest(the above
         <link href="{{asset('assets/global/plugins/jquery-nestable/jquery.nestable.css')}}" rel="stylesheet" type="text/css" />
         <link href="{{asset('assets/global/plugins/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
         <link href="{{asset('assets/global/plugins/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css')}}" rel="stylesheet" type="text/css" />
+@endif
         @yield('othercss')
+@if(!Request::header('X-PJAX'))
         <link rel="shortcut icon" href="favicon.ico" /> </head>
     <!-- END HEAD -->
 
@@ -607,8 +610,14 @@ License: You must have a valid license purchased only from themeforest(the above
                     </ul>
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE BASE CONTENT -->
-                    @yield('content')
-                    <div id="pjax-container"></div>
+                    <div id="pjax-container">
+@endif
+                        @yield('content')
+                        @if(Request::header('X-PJAX'))
+                            @yield('otherjs')
+                        @endif
+@if(!Request::header('X-PJAX'))
+                    </div>
                     <!-- END PAGE BASE CONTENT -->
                 </div>
                 <!-- END CONTENT BODY -->
@@ -1251,6 +1260,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <script src="{{asset('assets/global/plugins/jquery-nestable/jquery.nestable.js')}}" type="text/javascript"></script>
         <script src="{{asset('js/layer/layer.js')}}" type="text/javascript"></script>
         <script src="{{asset('js/jquery.pjax.js')}}"></script>
+@endif
         <script>
             $.ajaxSetup({
                 headers: {
@@ -1277,14 +1287,16 @@ License: You must have a valid license purchased only from themeforest(the above
                 };
                 toastr.{{$type}}('{{$message}}');
             @endif
-            //$.pjax.defaults.timeout = 60000;
             $(document).pjax('a', '#pjax-container');
             $(document).on("pjax:timeout", function(event) {
-                // 阻止超时导致链接跳转事件发生
                 event.preventDefault()
             });
         </script>
+        @if(!Request::header('X-PJAX'))
         @yield('otherjs')
+        @endif
+@if(!Request::header('X-PJAX'))
     </body>
 
 </html>
+@endif

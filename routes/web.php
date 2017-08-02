@@ -28,7 +28,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         //菜单管理
         Route::group(['prefix' => 'menu'], function () {
             Route::post('nestable', 'MenuController@nestable');
-            Route::resource('/','MenuController',['except'=>['create','show']]);
+            Route::resource('/', 'MenuController', ['except' => ['create', 'show']]);
         });
     });
 });
