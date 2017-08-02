@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Permission extends Model
 {
+    protected $guarded = [];
     protected $table = 'admin_role_permissions';
     
     public function admins(){
-        return $this->belongsToMany('App\Models\Admin','admin_user_permissions','permission_id','user_id');
+        return $this->belongsToMany(config('admin.database.users_model'),config('admin.database,user_permissions_table'),'permission_id','user_id');
     }
     
     public function roles(){
-        return $this->belongsToMany('App\Models\Role','admin_role_permissions','permission_id','role_id');
+        return $this->belongsToMany(config('admin.database.roles_model'),config('admin.database.role_permissions_table'),'permission_id','role_id');
     }
     
 }

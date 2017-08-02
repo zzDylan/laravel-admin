@@ -26,6 +26,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content="Preview page of Metronic Admin Theme #4 for blank page layout" name="description" />
         <meta content="" name="author" />
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
         <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
         <link href="{{asset('assets/global/plugins/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css" />
@@ -43,6 +44,10 @@ License: You must have a valid license purchased only from themeforest(the above
         <link href="{{asset('assets/layouts/layout4/css/custom.min.css')}}" rel="stylesheet" type="text/css" />
         <!-- END THEME LAYOUT STYLES -->
         <link href="{{asset('assets/global/plugins/bootstrap-toastr/toastr.min.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('assets/global/plugins/jquery-nestable/jquery.nestable.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('assets/global/plugins/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('assets/global/plugins/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css')}}" rel="stylesheet" type="text/css" />
+        @yield('othercss')
         <link rel="shortcut icon" href="favicon.ico" /> </head>
     <!-- END HEAD -->
 
@@ -603,6 +608,7 @@ License: You must have a valid license purchased only from themeforest(the above
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE BASE CONTENT -->
                     @yield('content')
+                    <div id="pjax-container"></div>
                     <!-- END PAGE BASE CONTENT -->
                 </div>
                 <!-- END CONTENT BODY -->
@@ -1240,7 +1246,17 @@ License: You must have a valid license purchased only from themeforest(the above
         <script src="{{asset('assets/layouts/global/scripts/quick-nav.min.js')}}" type="text/javascript"></script>
         <!-- END THEME LAYOUT SCRIPTS -->
         <script src="{{asset('assets/global/plugins/bootstrap-toastr/toastr.min.js')}}" type="text/javascript"></script>
+        <script src="{{asset('assets/global/plugins/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js')}}" type="text/javascript"></script>
+        <script src="{{asset('assets/global/plugins/select2/js/select2.min.js')}}" type="text/javascript"></script>
+        <script src="{{asset('assets/global/plugins/jquery-nestable/jquery.nestable.js')}}" type="text/javascript"></script>
+        <script src="{{asset('js/layer/layer.js')}}" type="text/javascript"></script>
+        <script src="{{asset('js/jquery.pjax.js')}}"></script>
         <script>
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $(document).ready(function()
             {
                 $('#clickmewow').click(function()
@@ -1261,7 +1277,10 @@ License: You must have a valid license purchased only from themeforest(the above
                 };
                 toastr.{{$type}}('{{$message}}');
             @endif
+            //$.pjax.defaults.timeout = 60000;
+            $(document).pjax('a', '#pjax-container',{timeout:60000000});
         </script>
+        @yield('otherjs')
     </body>
 
 </html>

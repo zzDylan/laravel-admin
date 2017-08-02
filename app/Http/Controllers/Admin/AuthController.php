@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller {
 
@@ -30,7 +31,12 @@ class AuthController extends Controller {
 
         if (Auth::guard('admin')->attempt($credentials)) {
             admin_toastr('success', '登录成功');
-            return redirect()->intended('admin');
+            if(Session::has('url.intented')){
+                $url = Session::get('url.intented');
+                Session::forget('url.intented');
+                return redirect($url);
+            }
+            return redirect('admin');
         }
 
         return Redirect::back()->withInput()->withErrors(['username' => '账号或者密码错误']);
