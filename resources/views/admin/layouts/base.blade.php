@@ -1278,7 +1278,11 @@ License: You must have a valid license purchased only from themeforest(the above
                 toastr.{{$type}}('{{$message}}');
             @endif
             //$.pjax.defaults.timeout = 60000;
-            $(document).pjax('a', '#pjax-container',{timeout:60000000});
+            $(document).pjax('a', '#pjax-container');
+            $(document).on("pjax:timeout", function(event) {
+                // 阻止超时导致链接跳转事件发生
+                event.preventDefault()
+            });
         </script>
         @yield('otherjs')
     </body>
