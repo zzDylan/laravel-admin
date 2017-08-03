@@ -8,7 +8,7 @@
                     <button type="button" class="btn green btn-outline sbold uppercase" data-action="expand-all"><i class="fa fa-plus"></i>展开</button>
                     <button type="button" class="btn red btn-outline sbold uppercase" data-action="collapse-all"><i class="fa fa-minus"></i>收起</button>
                 </span>
-                <button id="save" type="button" class="btn blue btn-outline sbold uppercase" data-action="collapse-all" ><i class="fa fa-save"></i>保存</button>
+                <button id="save" type="button" class="btn blue btn-outline sbold uppercase" data-action="collapse-all" disabled="disabled"><i class="fa fa-save"></i>保存</button>
                 <button id="refresh" type="button" class="btn yellow btn-outline sbold uppercase" data-action="collapse-all"><i class="fa fa-refresh"></i>刷新</button>
             </div>
             <div class="portlet-body ">
@@ -35,10 +35,7 @@
                             <div class="col-md-9">
                                 <select name="parent_id" class="form-control">
                                     <option value="0">顶级菜单</option>
-                                    @php
-                                    $menuModel = config('admin.database.menu_model');
-                                    @endphp
-                                    @include('admin.menu.menuSelect',['menus'=>$menuModel::where('parent_id',0)->get(),'sign'=>'&nbsp;&nbsp;&nbsp;&nbsp;'])
+                                    @include('admin.menu.menuSelect',['menus'=>$menus,'sign'=>'&nbsp;&nbsp;&nbsp;&nbsp;'])
                                 </select>
                             </div>
                         </div>
@@ -84,15 +81,12 @@
                         </div>
                         <div class="form-group @if($errors->has('roles')) has-error  @endif">
                             <label class="col-md-3 control-label">角色</label>
-                            <div class="col-md-9">
+                            <div class="col-md-8">
                                 @if($errors->has('roles'))
                                 <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$errors->first('roles')}}</label>
                                 @endif
                                 <select style="width: 100%;" id="roles" name="roles[]" class="form-control select2" multiple>
-                                    @php
-                                    $roleModel = config('admin.database.roles_model');
-                                    @endphp
-                                    @foreach($roleModel::all() as $role)
+                                    @foreach($roles as $role)
                                     <option @if(!empty(old('roles')) && in_array($role->id,old('roles'))) selected @endif value="{{$role->id}}">{{$role->name}}</option>
                                     @endforeach
                                 </select>
@@ -112,8 +106,6 @@
         </div>
     </div>
 </div>
-@endsection
-@section('otherjs')
 <script>
     //$('.icon').iconpicker();
     $('.dd').nestable({/* config options */});
@@ -124,8 +116,13 @@
         var nestable = $('.dd').nestable('serialize');
         console.log(nestable);
         $.post('/admin/menu/nestable', {"nestable": nestable}, function (res) {
-            $.pjax.reload('#pjax-container');
-            toastr.success('保存成功 !');
+            console.log(res);
+            if (res.status == 0) {
+                toastr.error(res.msg);
+            } else {
+                $.pjax.reload('#pjax-container');
+                toastr.success(res.msg);
+            }
         });
     });
     $("#refresh").click(function () {
@@ -144,23 +141,9 @@
         }
     });
     $('.select2').select2();
-    $('#addButton').click(function () {
-        $.post('/admin/menu', $('#addForm').serialize(), function (res) {
-            if (res.status == 0) {
-                layer.msg(res.msg);
-            } else {
-                layer.msg(res.msg, {icon: 1}, function () {
-                    location.href = '/admin/menu';
-                });
-            }
-        });
-    });
-    $(document).on('submit', 'form[data-pjax]', function (event) {
-        $.pjax.submit(event, '#pjax-container', {scrollTo: false})
-    })
-    $(document).on('pjax:success', function () {
-        console.log('test');
-    })
 
 </script>
+@endsection
+@section('otherjs')
+
 @endsection

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
 
 class MenuController extends Controller {
 
@@ -16,8 +15,13 @@ class MenuController extends Controller {
      */
     public function index() {
         $menuModel = config('admin.database.menu_model');
-        $menus = $menuModel::where('parent_id', 0)->get();
-        return view('admin.menu.index', ['menus' => $menus]);
+        $roleModel = config('admin.database.roles_model');
+        $menus = $menuModel::where('parent_id', 0)->orderBy('order')->get();
+        $roles = $roleModel::all();
+        return view('admin.menu.index', [
+            'menus' => $menus,
+            'roles' => $roles
+        ]);
     }
 
     /**
@@ -45,20 +49,22 @@ class MenuController extends Controller {
         if ($validator->fails()) {
             return back()->withInput()->withErrors($validator);
         }
-        $menuId = DB::table(config('admin.database.menu_table'))->insertGetId([
-            'parent_id' => $input['parent_id'],
-            'title' => $input['title'],
-            'icon' => $input['icon'],
-            'uri' => $input['uri']
+        $menuModel = config('admin.database.menu_model');
+        $menu = $menuModel::create([
+                    'parent_id' => $input['parent_id'],
+                    'title' => $input['title'],
+                    'icon' => $input['icon'],
+                    'uri' => $input['uri']
         ]);
+        $roleModel = config('admin.database.roles_model');
         foreach ($input['roles'] as $role) {
-            DB::table(config('admin.database.role_menu_table'))->insert([
+            $roleModel::create([
                 'role_id' => $role,
-                'menu_id' => $menuId
+                'menu_id' => $menu->id
             ]);
         }
         admin_toastr('success', '添加成功');
-        return redirect('/admin/menu');
+        return redirect(config('admin.prefix') . '/menu');
     }
 
     /**
@@ -68,7 +74,17 @@ class MenuController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        //
+        $menuModel = config('admin.database.menu_model');
+        $roleModel = config('admin.database.roles_model');
+        $menus = $menuModel::where('parent_id', 0)->orderBy('order')->get();
+        $roles = $roleModel::all();
+        $menu = $menuModel::find($id);
+        return view('admin.menu.edit', [
+            'menus' => $menus,
+            'roles' => $roles,
+            'menuRoles' => array_column($menu->roles->toArray(), 'id'),
+            'targetMenu' => $menu
+        ]);
     }
 
     /**
@@ -79,7 +95,39 @@ class MenuController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
+        $rule = [
+            'parent_id' => 'required',
+            'title' => 'required',
+            'icon' => 'required',
+            'uri' => 'required',
+            'roles' => 'required|array',
+        ];
+        $messages = [
+            'title.required' => '请填写菜单名',
+            'icon.required' => '请选择菜单图标',
+            'uri.required' => '请填写路径',
+            'roles.required' => '请选择角色'
+        ];
+        $input = $request->all();
+        $validator = Validator::make($input, $rule, $messages);
+        if ($validator->fails()) {
+            return back()->withInput()->withErrors($validator);
+        }
+        $menuModel = config('admin.database.menu_model');
+        $allChildrenIds = $menuModel::allChildrenIds($id);
+        if (in_array($input['parent_id'], $allChildrenIds) || $id == $input['parent_id']) {
+            admin_toastr('error', '父级选择错误');
+            return back()->withInput();
+        }
+        $menu = $menuModel::find($id);
+        $menu->update([
+            'parent_id' => $input['parent_id'],
+            'title' => $input['title'],
+            'icon' => $input['icon'],
+            'uri' => $input['uri']
+        ]);
+        admin_toastr('success', '更新成功');
+        return redirect(config('admin.prefix') . '/menu');
     }
 
     /**

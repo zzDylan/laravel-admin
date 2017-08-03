@@ -12,7 +12,6 @@
  */
 
 Route::get('/', function () {
-    dd(config('admin'));
     return view('welcome');
 });
 Route::get('/test3', 'Admin\MenuController@test3');
@@ -28,7 +27,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         //菜单管理
         Route::group(['prefix' => 'menu'], function () {
             Route::post('nestable', 'MenuController@nestable');
-            Route::resource('/', 'MenuController', ['except' => ['create', 'show']]);
         });
+        Route::resource('menu', 'MenuController', ['except' => ['create', 'show']]);
     });
 });

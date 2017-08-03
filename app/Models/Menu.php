@@ -14,7 +14,7 @@ class Menu extends Model {
     }
 
     public function childrens() {
-        return self::where('parent_id', $this->id)->get();
+        return self::where('parent_id', $this->id)->orderBy('order')->get();
     }
 
     public function roles() {
@@ -32,6 +32,17 @@ class Menu extends Model {
             }
         }
         return true;
+    }
+
+    public static function allChildrenIds($id, &$allChildrenIds = []) {
+        $menuIds = self::where('parent_id', $id)->pluck('id')->toArray();
+        if (!empty($menuIds)) {
+            $allChildrenIds = array_merge($menuIds, $allChildrenIds);
+            foreach ($menuIds as $menuId) {
+                self::allChildrenIds($menuId,$allChildrenIds);
+            }
+        }
+        return $allChildrenIds;
     }
 
 }

@@ -2,5 +2,5 @@
     @php
         $menuModel = config('admin.database.menu_model');
     @endphp
-    @include('admin.layouts.menuPart',['menus'=>$menuModel::where('parent_id',0)->get()])
+    @include('admin.layouts.menuPart',['menus'=>$menuModel::where('parent_id',0)->orderBy('order')->get()])
 </ul>
