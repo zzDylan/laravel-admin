@@ -12,6 +12,13 @@
  */
 
 Route::get('/', function () {
+    for($i=0;$i<50;$i++){
+        App\Models\Admin::create([
+            'username'=>'zz'.$i,
+            'name'=>'zz'.$i,
+            'password'=> bcrypt('123456'),
+        ]);
+    }
     return view('welcome');
 });
 Route::get('/test3', 'Admin\MenuController@test3');
@@ -25,9 +32,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
             return view('admin.index');
         });
         //菜单管理
-        Route::group(['prefix' => 'menu'], function () {
-            Route::post('nestable', 'MenuController@nestable');
-        });
+        Route::post('menu/nestable', 'MenuController@nestable');
         Route::resource('menu', 'MenuController', ['except' => ['create', 'show']]);
+        Route::post('user/batch_destroy', 'UserController@batchDestroy');
+        Route::resource('user', 'UserController');
     });
 });

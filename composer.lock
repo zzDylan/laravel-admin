@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae7f7db837c63b256115dc9883d6e90b",
+    "content-hash": "a90dc066f1f06f27fa22fdb82fe18d83",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -286,20 +286,20 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.4.30",
+            "version": "v5.4.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "b9a64955f4278f45ac348a6e000b5ecc85da167a"
+                "reference": "b8300578d159199b1195413b67318c79068cd24d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/laravel/framework/b9a64955f4278f45ac348a6e000b5ecc85da167a.zip",
-                "reference": "b9a64955f4278f45ac348a6e000b5ecc85da167a",
+                "url": "https://files.phpcomposer.com/files/laravel/framework/b8300578d159199b1195413b67318c79068cd24d.zip",
+                "reference": "b8300578d159199b1195413b67318c79068cd24d",
                 "shasum": ""
             },
             "require": {
-                "doctrine/inflector": "~1.0",
+                "doctrine/inflector": "~1.1.0",
                 "erusev/parsedown": "~1.6",
                 "ext-mbstring": "*",
                 "ext-openssl": "*",
@@ -411,7 +411,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2017-07-19T19:26:19+00:00"
+            "time": "2017-08-03T12:59:42+00:00"
         },
         {
             "name": "laravel/tinker",
@@ -1097,58 +1097,6 @@
             "time": "2017-03-26T20:37:53+00:00"
         },
         {
-            "name": "spatie/laravel-pjax",
-            "version": "1.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/spatie/laravel-pjax.git",
-                "reference": "30e1509517a6371a5774a29e99e2db204cb7fc5b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://files.phpcomposer.com/files/spatie/laravel-pjax/30e1509517a6371a5774a29e99e2db204cb7fc5b.zip",
-                "reference": "30e1509517a6371a5774a29e99e2db204cb7fc5b",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/http": "^5.1",
-                "illuminate/support": "^5.1",
-                "php": "^5.5.0|^7.0",
-                "symfony/css-selector": "^2.7|^3.0",
-                "symfony/dom-crawler": "^2.7|^3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.*",
-                "scrutinizer/ocular": "~1.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Spatie\\Pjax\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Freek Van der Herten",
-                    "email": "freek@spatie.be",
-                    "homepage": "https://spatie.be",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A pjax middleware for Laravel 5",
-            "homepage": "https://github.com/spatie/laravel-pjax",
-            "keywords": [
-                "laravel-pjax",
-                "pjax",
-                "spatie"
-            ],
-            "time": "2016-02-18T15:16:46+00:00"
-        },
-        {
             "name": "swiftmailer/swiftmailer",
             "version": "v5.4.8",
             "source": {
@@ -1379,62 +1327,6 @@
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
             "time": "2017-07-28T15:27:31+00:00"
-        },
-        {
-            "name": "symfony/dom-crawler",
-            "version": "v3.3.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/dom-crawler.git",
-                "reference": "fc2c588ce376e9fe04a7b8c79e3ec62fe32d95b1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://files.phpcomposer.com/files/symfony/dom-crawler/fc2c588ce376e9fe04a7b8c79e3ec62fe32d95b1.zip",
-                "reference": "fc2c588ce376e9fe04a7b8c79e3ec62fe32d95b1",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5.9",
-                "symfony/polyfill-mbstring": "~1.0"
-            },
-            "require-dev": {
-                "symfony/css-selector": "~2.8|~3.0"
-            },
-            "suggest": {
-                "symfony/css-selector": ""
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.3-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\DomCrawler\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony DomCrawler Component",
-            "homepage": "https://symfony.com",
-            "time": "2017-05-25T23:10:31+00:00"
         },
         {
             "name": "symfony/event-dispatcher",

@@ -27,67 +27,59 @@
                 </div>
             </div>
             <div class="portlet-body">
-                <form data-pjax id="addForm" method="post" action="/admin/menu" class="form-horizontal">
+                <form id="addForm" method="post" action="/admin/menu" class="form-horizontal">
                     <div class="form-body">
                         {{ csrf_field() }}
-                        <div class="form-group @if($errors->has('parent_id')) has-error  @endif">
+                        <div class="form-group">
                             <label class="col-md-3 control-label">父级菜单</label>
                             <div class="col-md-9">
-                                <select name="parent_id" class="form-control">
+                                <select name="parent_id" class="form-control" required>
                                     <option value="0">顶级菜单</option>
                                     @include('admin.menu.menuSelect',['menus'=>$menus,'sign'=>'&nbsp;&nbsp;&nbsp;&nbsp;'])
                                 </select>
+                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
-                        <div class="form-group @if($errors->has('title')) has-error  @endif">
+                        <div class="form-group">
                             <label class="col-md-3 control-label">标题</label>
                             <div class="col-md-8">
-                                @if($errors->has('title'))
-                                <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$errors->first('title')}}</label>
-                                @endif
+                                <div class="help-block with-errors"></div>
                                 <div class="input-group">
                                     <span class="input-group-addon">
                                         <i class="fa fa-pencil"></i>
                                     </span>
-                                    <input name="title" value="{{old('title')}}" type="text" class="form-control" placeholder="输入标题"> 
-
+                                    <input name="title" value="" type="text" class="form-control" placeholder="输入标题" required>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group @if($errors->has('icon')) has-error  @endif">
+                        <div class="form-group">
                             <label class="col-md-3 control-label">图标</label>
                             <div class="col-md-4">
+                                <div class="help-block with-errors"></div>
                                 <div class="input-group">
-                                    @if($errors->has('icon'))
-                                    <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$errors->first('icon')}}</label>
-                                    @endif
-                                    <input name="icon" value="{{old('icon')}}" style="height: 34px" class="icon" type="text" class="form-control" placeholder=""> 
+                                    <input name="icon" value="" style="height: 34px" class="icon" type="text" class="form-control" placeholder="" required> 
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group @if($errors->has('uri')) has-error  @endif">
+                        <div class="form-group">
                             <label class="col-md-3 control-label">路径</label>
                             <div class="col-md-8">
-                                @if($errors->has('uri'))
-                                <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$errors->first('uri')}}</label>
-                                @endif
+                                <div class="help-block with-errors"></div>
                                 <div class="input-group">
                                     <span class="input-group-addon">
                                         <i class="fa fa-pencil"></i>
                                     </span>
-                                    <input name="uri" value="{{old('uri')}}" type="text" class="form-control" placeholder="输入路径"> 
+                                    <input name="uri" value="" type="text" class="form-control" placeholder="输入路径" required> 
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group @if($errors->has('roles')) has-error  @endif">
+                        <div class="form-group">
                             <label class="col-md-3 control-label">角色</label>
                             <div class="col-md-8">
-                                @if($errors->has('roles'))
-                                <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$errors->first('roles')}}</label>
-                                @endif
-                                <select style="width: 100%;" id="roles" name="roles[]" class="form-control select2" multiple>
+                                <div class="help-block with-errors"></div>
+                                <select id="roles" name="roles[]" class="form-control select2" multiple required>
                                     @foreach($roles as $role)
-                                    <option @if(!empty(old('roles')) && in_array($role->id,old('roles'))) selected @endif value="{{$role->id}}">{{$role->name}}</option>
+                                    <option value="{{$role->id}}">{{$role->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -106,44 +98,79 @@
         </div>
     </div>
 </div>
-<script>
-    //$('.icon').iconpicker();
-    $('.dd').nestable({/* config options */});
-    $('.dd').on('change', function () {
-        $("#save").attr('disabled', false);
-    });
-    $('#save').click(function () {
-        var nestable = $('.dd').nestable('serialize');
-        console.log(nestable);
-        $.post('/admin/menu/nestable', {"nestable": nestable}, function (res) {
-            console.log(res);
-            if (res.status == 0) {
-                toastr.error(res.msg);
-            } else {
-                $.pjax.reload('#pjax-container');
-                toastr.success(res.msg);
-            }
-        });
-    });
-    $("#refresh").click(function () {
-        $.pjax.reload('#pjax-container');
-        toastr.success('刷新成功 !');
-    });
-    $('#nestable-menu').on('click', function (e)
-    {
-        var target = $(e.target),
-                action = target.data('action');
-        if (action === 'expand-all') {
-            $('.dd').nestable('expandAll');
-        }
-        if (action === 'collapse-all') {
-            $('.dd').nestable('collapseAll');
-        }
-    });
-    $('.select2').select2();
-
-</script>
 @endsection
 @section('otherjs')
-
+<script>
+    $(function () {
+        $('#addForm').validator({
+            focus: false
+        })
+        $('.select2').select2();
+        $('.icon').iconpicker();
+        $('.dd').nestable({/* config options */});
+        $('.dd').on('change', function () {
+            $("#save").attr('disabled', false);
+        });
+        $('#save').click(function () {
+            var nestable = $('.dd').nestable('serialize');
+            console.log(nestable);
+            $.post('/admin/menu/nestable', {"nestable": nestable}, function (res) {
+                if (res.status == 0) {
+                    layer.msg(res.msg, {icon: 5});
+                } else {
+                    layer.msg(res.msg, {icon: 1}, function () {
+                        location.href = "{{asset(config('admin.prefix').'/menu')}}";
+                    });
+                }
+            });
+        });
+        $('#nestable-menu').on('click', function (e)
+        {
+            var target = $(e.target),
+                    action = target.data('action');
+            if (action === 'expand-all') {
+                $('.dd').nestable('expandAll');
+            }
+            if (action === 'collapse-all') {
+                $('.dd').nestable('collapseAll');
+            }
+        });
+        $('.menu_delete').click(function () {
+            var ele = $(this);
+            var id = ele.data('id')
+            layer.confirm('确认删除?', {btn: ['是', '否']}, function () {
+                layer.load(1, {shade: [0.1, '#fff']});
+                $.ajax({
+                    url: "{{asset(config('admin.prefix').'/menu')}}" + '/' + id,
+                    type: 'delete',
+                    dataType: 'json',
+                    success: function (res) {
+                        layer.closeAll();
+                        if (res.status == 0) {
+                            layer.msg(res.msg, {icon: 5});
+                        } else {
+                            ele.parents("li")[0].remove();
+                            layer.msg(res.msg, {icon: 1});
+                        }
+                    }
+                });
+            });
+        });
+        $('#addForm').validator().on('submit', function (e) {
+            if (!e.isDefaultPrevented()) {
+                layer.load(1, {shade: [0.1, '#fff']});
+                $.post("{{asset(config('admin.prefix')).'/menu'}}", $('#addForm').serialize(), function (res) {
+                    layer.closeAll();
+                    if (res.status == 0) {
+                        layer.msg(res.msg, {icon: 5});
+                    } else {
+                        layer.msg(res.msg, {icon: 1});
+                        location.href = "{{asset(config('admin.prefix')).'/menu'}}";
+                    }
+                });
+            }
+            return false;
+        })
+    })
+</script>
 @endsection

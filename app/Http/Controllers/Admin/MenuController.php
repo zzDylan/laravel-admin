@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use DB;
 
 class MenuController extends Controller {
 
@@ -38,33 +39,26 @@ class MenuController extends Controller {
             'uri' => 'required',
             'roles' => 'required|array',
         ];
-        $messages = [
-            'title.required' => '请填写菜单名',
-            'icon.required' => '请选择菜单图标',
-            'uri.required' => '请填写路径',
-            'roles.required' => '请选择角色'
-        ];
         $input = $request->all();
-        $validator = Validator::make($input, $rule, $messages);
-        if ($validator->fails()) {
-            return back()->withInput()->withErrors($validator);
-        }
+        Validator::make($input, $rule)->validate();
         $menuModel = config('admin.database.menu_model');
-        $menu = $menuModel::create([
-                    'parent_id' => $input['parent_id'],
-                    'title' => $input['title'],
-                    'icon' => $input['icon'],
-                    'uri' => $input['uri']
-        ]);
-        $roleModel = config('admin.database.roles_model');
-        foreach ($input['roles'] as $role) {
-            $roleModel::create([
-                'role_id' => $role,
-                'menu_id' => $menu->id
+        try {
+            $menu = $menuModel::create([
+                        'parent_id' => $input['parent_id'],
+                        'title' => $input['title'],
+                        'icon' => $input['icon'],
+                        'uri' => $input['uri']
             ]);
+            foreach ($input['roles'] as $role) {
+                DB::table(config('admin.database.role_menu_table'))->insert([
+                    'role_id' => $role,
+                    'menu_id' => $menu->id
+                ]);
+            }
+        } catch (\Exception $e) {
+            return ['status' => 0, 'msg' => $e->getMessage()];
         }
-        admin_toastr('success', '添加成功');
-        return redirect(config('admin.prefix') . '/menu');
+        return ['status' => 1, 'msg' => '添加成功!'];
     }
 
     /**
@@ -102,32 +96,26 @@ class MenuController extends Controller {
             'uri' => 'required',
             'roles' => 'required|array',
         ];
-        $messages = [
-            'title.required' => '请填写菜单名',
-            'icon.required' => '请选择菜单图标',
-            'uri.required' => '请填写路径',
-            'roles.required' => '请选择角色'
-        ];
         $input = $request->all();
-        $validator = Validator::make($input, $rule, $messages);
-        if ($validator->fails()) {
-            return back()->withInput()->withErrors($validator);
-        }
+        Validator::make($input, $rule)->validate();
         $menuModel = config('admin.database.menu_model');
         $allChildrenIds = $menuModel::allChildrenIds($id);
         if (in_array($input['parent_id'], $allChildrenIds) || $id == $input['parent_id']) {
-            admin_toastr('error', '父级选择错误');
-            return back()->withInput();
+            return ['status' => 0, 'msg' => '父级选择错误!'];
         }
         $menu = $menuModel::find($id);
-        $menu->update([
-            'parent_id' => $input['parent_id'],
-            'title' => $input['title'],
-            'icon' => $input['icon'],
-            'uri' => $input['uri']
-        ]);
-        admin_toastr('success', '更新成功');
-        return redirect(config('admin.prefix') . '/menu');
+        try {
+            $menu->update([
+                'parent_id' => $input['parent_id'],
+                'title' => $input['title'],
+                'icon' => $input['icon'],
+                'uri' => $input['uri']
+            ]);
+        } catch (\Exception $e) {
+            return ['status' => 0, 'msg' => $e->getMessage()];
+        }
+
+        return ['status' => 1, 'msg' => '更新成功!'];
     }
 
     /**
@@ -137,7 +125,9 @@ class MenuController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        $menuModel = config('admin.database.menu_model');
+        $menuModel::destroy($id);
+        return ['stauts'=>1,'msg'=>'删除成功'];
     }
 
     /**
@@ -146,7 +136,11 @@ class MenuController extends Controller {
      */
     public function nestable(Request $request) {
         $menuModel = config('admin.database.menu_model');
-        $menuModel::recursionNestable($request->input('nestable'));
+        try {
+            $menuModel::recursionNestable($request->input('nestable'));
+        } catch (\Exception $e) {
+            return ['status' => 0, 'msg' => $e->getMessage()];
+        }
         return ['status' => 1, 'msg' => '更新成功'];
     }
 

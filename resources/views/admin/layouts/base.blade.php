@@ -28,7 +28,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <meta content="" name="author" />
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
-        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+        <!--        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />-->
         <link href="{{asset('assets/global/plugins/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css" />
         <link href="{{asset('assets/global/plugins/simple-line-icons/simple-line-icons.min.css')}}" rel="stylesheet" type="text/css" />
         <link href="{{asset('assets/global/plugins/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
@@ -43,13 +43,15 @@ License: You must have a valid license purchased only from themeforest(the above
         <link href="{{asset('assets/layouts/layout4/css/themes/default.min.css')}}" rel="stylesheet" type="text/css" id="style_color" />
         <link href="{{asset('assets/layouts/layout4/css/custom.min.css')}}" rel="stylesheet" type="text/css" />
         <!-- END THEME LAYOUT STYLES -->
-        <link href="{{asset('assets/global/plugins/bootstrap-toastr/toastr.min.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('packages/admin/toastr/build/toastr.min.css')}}" rel="stylesheet" type="text/css" />
         <link href="{{asset('assets/global/plugins/jquery-nestable/jquery.nestable.css')}}" rel="stylesheet" type="text/css" />
-        <link href="{{asset('assets/global/plugins/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
-        <link href="{{asset('assets/global/plugins/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css')}}" rel="stylesheet" type="text/css" />
-        @if(!is_pjax())
-            @yield('othercss')
-        @endif
+        <link href="{{asset('packages/admin/select2/dist/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('packages/admin/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css')}}" rel="stylesheet" type="text/css" />
+        <!--<link href="{{asset('packages/admin/nprogress/nprogress.css')}}" rel="stylesheet" type="text/css" />-->
+        <link href="{{asset('packages/admin/nestable/jquery.nestable.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('packages/admin/bootstrap-table/dist/bootstrap-table.min.css')}}" rel="stylesheet" type="text/css" />
+        @yield('othercss')
+<!--        <script src="{{asset('js/jquery.pjax.js')}}"></script>-->
         <link rel="shortcut icon" href="favicon.ico" /> </head>
     <!-- END HEAD -->
 
@@ -193,14 +195,8 @@ License: You must have a valid license purchased only from themeforest(the above
                     </ul>
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE BASE CONTENT -->
-                    <div id="pjax-container">
-                        @if(is_pjax())
-                            @yield('othercss')
-                        @endif
+                    <div>
                         @yield('content')
-                        @if(is_pjax())
-                            @yield('otherjs')
-                        @endif
                     </div>
                     <!-- END PAGE BASE CONTENT -->
                 </div>
@@ -223,8 +219,10 @@ License: You must have a valid license purchased only from themeforest(the above
         </div>
         <!-- END FOOTER -->
         <!-- BEGIN QUICK NAV -->
-        
-        <div class="quick-nav-overlay"></div>
+
+        <div class="quick-nav-overlay">
+        </div>
+        @yield('otherdiv')
         <!-- END QUICK NAV -->
         <!--[if lt IE 9]>
 <script src="../assets/global/plugins/respond.min.js"></script>
@@ -248,50 +246,40 @@ License: You must have a valid license purchased only from themeforest(the above
         <script src="{{asset('assets/layouts/global/scripts/quick-sidebar.min.js')}}" type="text/javascript"></script>
         <script src="{{asset('assets/layouts/global/scripts/quick-nav.min.js')}}" type="text/javascript"></script>
         <!-- END THEME LAYOUT SCRIPTS -->
-        <script src="{{asset('assets/global/plugins/bootstrap-toastr/toastr.min.js')}}" type="text/javascript"></script>
-        <script src="{{asset('assets/global/plugins/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js')}}" type="text/javascript"></script>
-        <script src="{{asset('assets/global/plugins/select2/js/select2.min.js')}}" type="text/javascript"></script>
-        <script src="{{asset('assets/global/plugins/jquery-nestable/jquery.nestable.js')}}" type="text/javascript"></script>
+        <script src="{{asset('packages/admin/toastr/build/toastr.min.js')}}" type="text/javascript"></script>
+        <script src="{{asset('packages/admin/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js')}}" type="text/javascript"></script>
+        <script src="{{asset('packages/admin/select2/dist/js/select2.min.js')}}" type="text/javascript"></script>
+<!--        <script src="{{asset('assets/global/plugins/jquery-nestable/jquery.nestable.js')}}" type="text/javascript"></script>-->
+        <script src="{{asset('packages/admin/nestable/jquery.nestable.js')}}" type="text/javascript"></script>
         <script src="{{asset('js/layer/layer.js')}}" type="text/javascript"></script>
-        <script src="{{asset('js/jquery.pjax.js')}}"></script>
+        <script src="{{asset('packages/admin/bootstrap-validator/dist/validator.min.js')}}" type="text/javascript"></script>
+<!--        <script src="{{asset('packages/admin/nprogress/nprogress.js')}}"></script>-->
+        <script src="{{asset('packages/admin/bootstrap-table/dist/bootstrap-table.min.js')}}"></script>
+        <script src="{{asset('packages/admin/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js')}}"></script>
+        <script src="{{asset('packages/admin/tableExport.jquery.plugin/tableExport.min.js')}}"></script>
+        <script src="{{asset('packages/admin/bootstrap-table/dist/extensions/export/bootstrap-table-export.js')}}"></script>
+        <script src="{{asset('packages/admin/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.js')}}"></script>
+        
         <script>
-            $.pjax.defaults.maxCacheLength = 0;
-            $(document).pjax('a', '#pjax-container');
-            $(document).on("pjax:timeout", function(event) {
-                event.preventDefault()
-            });
-            $(document).on('submit', 'form[data-pjax]', function (event) {
-                $.pjax.submit(event, '#pjax-container', {scrollTo: false})
-            })
-            $(document).on('pjax:send', function () {
-                console.log('send');
-                $('#add_button').text('loading....');
-            })
-            $(document).on('pjax:complete', function () {
-                console.log('complete');
-                $('#add_button').text('提交');
-            });
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            @if(Session::has('toastr'))
-                @php
-                    $type = session('toastr.type');
-                    $message = session('toastr.message');
-                @endphp
-                toastr.options = {
-                    closeButton: true,
-                    progressBar: true,
-                    showMethod: 'slideDown',
-                    timeOut: 4000
-                };
-                toastr.{{$type}}('{{$message}}');
-            @endif
+$.ajaxSetup({
+headers: {
+'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+}
+});
+toastr.options = {
+closeButton: true,
+        progressBar: true,
+        showMethod: 'slideDown',
+        timeOut: 4000
+};
+@if (Session::has('toastr'))
+        @php
+        $type = session('toastr.type');
+$message = session('toastr.message');
+@endphp
+        toastr.{{$type}}('{{$message}}');
+@endif
         </script>
-        @if(!is_pjax())
-            @yield('otherjs')
-        @endif
+        @yield('otherjs')
     </body>
 </html>
