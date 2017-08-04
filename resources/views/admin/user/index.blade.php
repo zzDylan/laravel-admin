@@ -26,9 +26,9 @@
         pagination: true,
         showRefresh: true,
         showExport: true,
-        advancedSearch: true,
+//        advancedSearch: true,//高级搜索
         toolbar: "#toolbar",
-        idTable:"table",
+//        idTable:"table",
         columns: [
             {
                 field: 'state',
