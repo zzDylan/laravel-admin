@@ -127,7 +127,7 @@ class MenuController extends Controller {
     public function destroy($id) {
         $menuModel = config('admin.database.menu_model');
         $menuModel::destroy($id);
-        return ['stauts'=>1,'msg'=>'删除成功'];
+        return ['status'=>1,'msg'=>'删除成功'];
     }
 
     /**

@@ -1,7 +1,7 @@
-@foreach($menus as $menu)
+@foreach($menus as $key=>$menu)
 @if(Auth::guard('admin')->user()->visible($menu->roles))
 <li class="nav-item start ">
-    <a href="@if($menu->hasChildren())javascript:;@else{{asset($menu->uri)}}@endif" class="nav-link @if($menu->hasChildren())nav-toggle @endif">
+    <a href="@if($menu->hasChildren())javascript:;@else{{asset(config('admin.prefix').'/'.$menu->uri)}}@endif" class="nav-link @if($menu->hasChildren())nav-toggle @endif">
         <i class="fa {{$menu->icon}}"></i>
         <span class="title">{{$menu->title}}</span>
         @if($menu->hasChildren())

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Permission extends Model
 {
     protected $guarded = [];
-    protected $table = 'admin_role_permissions';
+    protected $table = 'admin_permissions';
     
     public function admins(){
         return $this->belongsToMany(config('admin.database.users_model'),config('admin.database,user_permissions_table'),'permission_id','user_id');

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use DB;
 
-class RoleController extends Controller {
+class PermissionController extends Controller {
 
     /**
      * Display a listing of the resource.
@@ -17,29 +17,29 @@ class RoleController extends Controller {
     public function index(Request $request) {
         //如果是异步请求则返回json数据
         if ($request->ajax()) {
-            $roleModel = config('admin.database.roles_model');
+            $permissionModel = config('admin.database.permissions_model');
             if ($request->input('search')) {
-                $roles = $roleModel::where('name', 'like', $request->input('search') . '%')->offset($request->input('offset'))->limit($request->input('limit'))->get();
-                $total = $roleModel::where('name', 'like', $request->input('search') . '%')->count();
+                $permissions = $permissionModel::where('name', 'like', $request->input('search') . '%')->offset($request->input('offset'))->limit($request->input('limit'))->get();
+                $total = $permissionModel::where('name', 'like', $request->input('search') . '%')->count();
             } else {
-                $roles = $roleModel::offset($request->input('offset'))->limit($request->input('limit'))->get();
-                $total = $roleModel::count();
+                $permissions = $permissionModel::offset($request->input('offset'))->limit($request->input('limit'))->get();
+                $total = $permissionModel::count();
             }
-            $roleData = [];
-            foreach ($roles as $key => $role) {
-                $roleData[$key]['id'] = $role->id;
-                $roleData[$key]['name'] = $role->name;
-                $roleData[$key]['slug'] = $role->slug;
-                $roleData[$key]['created_at'] = (string) $role->created_at;
-                $roleData[$key]['updated_at'] = (string) $role->updated_at;
+            $permissionData = [];
+            foreach ($permissions as $key => $permission) {
+                $permissionData[$key]['id'] = $permission->id;
+                $permissionData[$key]['name'] = $permission->name;
+                $permissionData[$key]['slug'] = $permission->slug;
+                $permissionData[$key]['created_at'] = (string) $permission->created_at;
+                $permissionData[$key]['updated_at'] = (string) $permission->updated_at;
             }
             return [
                 'total' => $total,
-                'rows' => $roleData
+                'rows' => $permissionData
             ];
         }
         //如果是同步请求，返回视图
-        return view('admin.role.index');
+        return view('admin.permission.index');
     }
 
     /**
@@ -48,9 +48,7 @@ class RoleController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        $permissionModel = config('admin.database.permissions_model');
-        $permissions = $permissionModel::all();
-        return view('admin.role.create', ['permissions' => $permissions]);
+        return view('admin.permission.create');
     }
 
     /**
@@ -66,21 +64,12 @@ class RoleController extends Controller {
         ];
         $input = $request->all();
         Validator::make($input, $rule)->validate();
-        $roleModel = config('admin.database.roles_model');
-        $rolePermissionsTable = config('admin.database.role_permissions_table');
+        $permissionModel = config('admin.database.permissions_model');
         try {
-            $role = $roleModel::create([
-                        'name' => $input['name'],
-                        'slug' => $input['slug']
+            $permissionModel::create([
+                'name' => $input['name'],
+                'slug' => $input['slug']
             ]);
-            if (isset($input['permissions']) && is_array($input['permissions'])) {
-                foreach ($input['permissions'] as $permission) {
-                    DB::table($rolePermissionsTable)->insert([
-                        'permission_id' => $permission,
-                        'role_id' => $role->id
-                    ]);
-                }
-            }
         } catch (\Exception $e) {
             return ['status' => 0, 'msg' => $e->getMessage()];
         }
@@ -130,8 +119,8 @@ class RoleController extends Controller {
         ];
         $input = $request->all();
         Validator::make($input, $rule)->validate();
-        $roleModel = config('admin.database.roles_model');
-        $roleModel::destroy($input['ids']);
+        $permissionModel = config('admin.database.permissions_model');
+        $permissionModel::destroy($input['ids']);
         return ['status' => 1, 'msg' => '删除成功!'];
     }
 

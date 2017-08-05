@@ -77,7 +77,7 @@
                             <label class="col-md-3 control-label">角色</label>
                             <div class="col-md-8">
                                 <div class="help-block with-errors"></div>
-                                <select id="roles" name="roles[]" class="form-control select2" multiple required>
+                                <select id="roles" name="roles[]" class="form-control" multiple required>
                                     @foreach($roles as $role)
                                     <option value="{{$role->id}}">{{$role->name}}</option>
                                     @endforeach
@@ -101,76 +101,72 @@
 @endsection
 @section('otherjs')
 <script>
-    $(function () {
-        $('#addForm').validator({
-            focus: false
-        })
-        $('.select2').select2();
-        $('.icon').iconpicker();
-        $('.dd').nestable({/* config options */});
-        $('.dd').on('change', function () {
-            $("#save").attr('disabled', false);
+    $('#addForm').validator({focus: false})
+    $('#roles').select2();
+    $('.icon').iconpicker();
+    $('.dd').nestable();
+    $('.dd').on('change', function () {
+        $("#save").attr('disabled', false);
+    });
+    $('#save').click(function () {
+        var nestable = $('.dd').nestable('serialize');
+        console.log(nestable);
+        $.post('/admin/menu/nestable', {"nestable": nestable}, function (res) {
+            if (res.status == 0) {
+                layer.msg(res.msg, {icon: 5});
+            } else {
+                layer.msg(res.msg, {icon: 1}, function () {
+                    location.href = "{{asset(config('admin.prefix').'/menu')}}";
+                });
+            }
         });
-        $('#save').click(function () {
-            var nestable = $('.dd').nestable('serialize');
-            console.log(nestable);
-            $.post('/admin/menu/nestable', {"nestable": nestable}, function (res) {
-                if (res.status == 0) {
-                    layer.msg(res.msg, {icon: 5});
-                } else {
-                    layer.msg(res.msg, {icon: 1}, function () {
-                        location.href = "{{asset(config('admin.prefix').'/menu')}}";
-                    });
+    });
+    $('#nestable-menu').on('click', function (e)
+    {
+        var target = $(e.target),
+                action = target.data('action');
+        if (action === 'expand-all') {
+            $('.dd').nestable('expandAll');
+        }
+        if (action === 'collapse-all') {
+            $('.dd').nestable('collapseAll');
+        }
+    });
+    $('.menu_delete').click(function () {
+        var ele = $(this);
+        var id = ele.data('id')
+        layer.confirm('确认删除?', {btn: ['是', '否']}, function () {
+            layer.load(1, {shade: [0.1, '#fff']});
+            $.ajax({
+                url: "{{asset(config('admin.prefix').'/menu')}}" + '/' + id,
+                type: 'delete',
+                dataType: 'json',
+                success: function (res) {
+                    layer.closeAll();
+                    if (res.status == 1) {
+                        ele.parents("li")[0].remove();
+                        layer.msg(res.msg, {icon: 1});
+                    } else {
+                        layer.msg(res.msg, {icon: 5});
+                    }
                 }
             });
         });
-        $('#nestable-menu').on('click', function (e)
-        {
-            var target = $(e.target),
-                    action = target.data('action');
-            if (action === 'expand-all') {
-                $('.dd').nestable('expandAll');
-            }
-            if (action === 'collapse-all') {
-                $('.dd').nestable('collapseAll');
-            }
-        });
-        $('.menu_delete').click(function () {
-            var ele = $(this);
-            var id = ele.data('id')
-            layer.confirm('确认删除?', {btn: ['是', '否']}, function () {
-                layer.load(1, {shade: [0.1, '#fff']});
-                $.ajax({
-                    url: "{{asset(config('admin.prefix').'/menu')}}" + '/' + id,
-                    type: 'delete',
-                    dataType: 'json',
-                    success: function (res) {
-                        layer.closeAll();
-                        if (res.status == 0) {
-                            layer.msg(res.msg, {icon: 5});
-                        } else {
-                            ele.parents("li")[0].remove();
-                            layer.msg(res.msg, {icon: 1});
-                        }
-                    }
-                });
+    });
+    $('#addForm').validator().on('submit', function (e) {
+        if (!e.isDefaultPrevented()) {
+            layer.load(1, {shade: [0.1, '#fff']});
+            $.post("{{asset(config('admin.prefix')).'/menu'}}", $('#addForm').serialize(), function (res) {
+                layer.closeAll();
+                if (res.status == 1) {
+                    layer.msg(res.msg, {icon: 1});
+                    location.href = "{{asset(config('admin.prefix')).'/menu'}}";
+                } else {
+                    layer.msg(res.msg, {icon: 5});
+                }
             });
-        });
-        $('#addForm').validator().on('submit', function (e) {
-            if (!e.isDefaultPrevented()) {
-                layer.load(1, {shade: [0.1, '#fff']});
-                $.post("{{asset(config('admin.prefix')).'/menu'}}", $('#addForm').serialize(), function (res) {
-                    layer.closeAll();
-                    if (res.status == 0) {
-                        layer.msg(res.msg, {icon: 5});
-                    } else {
-                        layer.msg(res.msg, {icon: 1});
-                        location.href = "{{asset(config('admin.prefix')).'/menu'}}";
-                    }
-                });
-            }
-            return false;
-        })
+        }
+        return false;
     })
 </script>
 @endsection

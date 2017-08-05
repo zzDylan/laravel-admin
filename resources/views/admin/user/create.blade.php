@@ -13,56 +13,53 @@
     </div>
     <div class="portlet-body form">
         <!-- BEGIN FORM-->
-        <form id="editForm" method="post" action="/admin/menu/{{$targetMenu->id}}" class="form-horizontal">
+        <form id="addForm" method="post" action="" class="form-horizontal">
             <div class="form-body">
                 <div class="form-group">
-                    <label class="col-md-3 control-label">父级菜单</label>
-                    <div class="col-md-8">
-                        <select name="parent_id" class="form-control" required>
-                            <option value="0">顶级菜单</option>
-                            @php
-                            $data = [
-                            'menus'=>$menus,
-                            'sign'=>'&nbsp;&nbsp;&nbsp;&nbsp;'
-                            ];
-                            if(isset($targetMenu)){
-                            $data['targetMenu'] = $targetMenu;
-                            }
-                            @endphp
-                            @include('admin.menu.menuSelect',$data)
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-3 control-label">标题</label>
+                    <label class="col-md-3 control-label">用户名</label>
                     <div class="col-md-8">
                         <div class="help-block with-errors"></div>
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <i class="fa fa-pencil"></i>
                             </span>
-                            <input name="title" value="{{$targetMenu->title}}" type="text" class="form-control" placeholder="输入标题" required> 
+                            <input name="username" value="" type="text" class="form-control" placeholder="输入用户名" required> 
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-3 control-label">图标</label>
+                    <label class="col-md-3 control-label">姓名</label>
                     <div class="col-md-4">
                         <div class="help-block with-errors"></div>
                         <div class="input-group">
-                            <input name="icon" value="{{$targetMenu->icon}}" style="height: 34px" class="icon" type="text" class="form-control" placeholder="" required> 
+                            <span class="input-group-addon">
+                                <i class="fa fa-pencil"></i>
+                            </span>
+                            <input name="name" value="" type="text" class="form-control" placeholder="输入姓名" required> 
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-3 control-label">路径</label>
+                    <label class="col-md-3 control-label">密码</label>
                     <div class="col-md-8">
                         <div class="help-block with-errors"></div>
                         <div class="input-group">
                             <span class="input-group-addon">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-eye-slash"></i>
                             </span>
-                            <input name="uri" value="{{$targetMenu->uri}}" type="text" class="form-control" placeholder="输入路径" required> 
+                            <input id="password" name="password" value="" type="password" class="form-control" placeholder="输入密码" required> 
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">确认密码</label>
+                    <div class="col-md-8">
+                        <div class="help-block with-errors"></div>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-eye-slash"></i>
+                            </span>
+                            <input name="repassword" value="" type="password" class="form-control" placeholder="输入确认密码" required data-match="#password"> 
                         </div>
                     </div>
                 </div>
@@ -70,9 +67,20 @@
                     <label class="col-md-3 control-label">角色</label>
                     <div class="col-md-8">
                         <div class="help-block with-errors"></div>
-                        <select style="width: 100%;" id="roles" name="roles[]" class="form-control select2" multiple required>
+                        <select style="width: 100%;" name="roles[]" class="form-control select2" multiple required>
                             @foreach($roles as $role)
-                            <option @if(isset($targetMenu) && in_array($role->id,$menuRoles)) selected @endif value="{{$role->id}}">{{$role->name}}</option>
+                            <option  value="{{$role->id}}">{{$role->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">权限</label>
+                    <div class="col-md-8">
+                        <div class="help-block with-errors"></div>
+                        <select style="width: 100%;" name="permissions[]" class="form-control select2" multiple>
+                            @foreach($permissions as $permission)
+                            <option  value="{{$permission->id}}">{{$permission->name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -93,21 +101,20 @@
 @endsection
 @section('otherjs')
 <script>
-    $('.icon').iconpicker();
     $('.select2').select2();
-    $('#editForm').validator().on('submit', function (e) {
+    $('#addForm').validator().on('submit', function (e) {
         if (!e.isDefaultPrevented()) {
             layer.load(1, {shade: [0.1, '#fff']});
             $.ajax({
-                url: "{{asset(config('admin.prefix').'/menu').'/'.$targetMenu->id}}",
-                type: 'put',
+                url: "{{asset(config('admin.prefix').'/user')}}",
+                type: 'post',
                 dataType: "json",
-                data: $("#editForm").serialize(),
+                data: $("#addForm").serialize(),
                 success: function (res) {
                     layer.closeAll();
                     if (res.status == 1) {
                         layer.msg(res.msg, {icon: 1});
-                        location.href = "{{asset(config('admin.prefix')).'/menu'}}";
+                        location.href = "{{asset(config('admin.prefix')).'/user'}}";
                     } else {
                         layer.msg(res.msg, {icon: 5});
                     }

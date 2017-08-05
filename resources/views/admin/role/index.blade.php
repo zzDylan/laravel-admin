@@ -4,13 +4,13 @@
     <div class="portlet-title">
         <div class="caption">
             <i class="icon-social-dribbble font-dark hide"></i>
-            <span class="caption-subject font-dark bold uppercase">用户管理</span>
+            <span class="caption-subject font-dark bold uppercase">角色管理</span>
         </div>
     </div>
     <div class="portlet-body">
         <div id="toolbar">
-            @if(Auth::guard('admin')->user()->checkPermission('user.create')) <a href="{{asset(config('admin.prefix').'/user/create')}}" class="btn btn-success">新增</a> @endif
-            @if(Auth::guard('admin')->user()->checkPermission('user.delete')) <a class="btn btn-danger remove">删除</a> @endif
+            <a href="{{asset(config('admin.prefix').'/role/create')}}" class="btn btn-success">新增</a>
+            <a class="btn btn-danger remove">删除</a>
         </div>
         <table id="table"></table>
     </div>
@@ -20,7 +20,7 @@
 <script>
     $table = $('#table');
     $table.bootstrapTable({
-        url: "{{asset(config('admin.prefix').'/user')}}",
+        url: "{{asset(config('admin.prefix').'/role')}}",
         search: true,
         sidePagination: 'server',
         pagination: true,
@@ -37,11 +37,11 @@
                 field: 'id',
                 title: 'id'
             }, {
-                field: 'username',
-                title: '用户名'
+                field: 'name',
+                title: '名称'
             }, {
-                field: 'roles',
-                title: '角色'
+                field: 'slug',
+                title: '标识'
             },
             {
                 field: 'created_at',
@@ -58,7 +58,7 @@
             layer.load(1, {shade: [0.1, '#fff']});
             var ids = getSelectionIds();
             layer.load(1, {shade: [0.1, '#fff']});
-            $.post("{{asset(config('admin.prefix').'/user/batch_destroy')}}", {ids: ids}, function (res) {
+            $.post("{{asset(config('admin.prefix').'/role/batch_destroy')}}", {ids: ids}, function (res) {
                 layer.closeAll();
                 if (res.status == 1) {
                     layer.msg(res.msg, {icon: 1});
