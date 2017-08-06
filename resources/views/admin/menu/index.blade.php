@@ -10,7 +10,7 @@
                     <button type="button" class="btn red btn-outline sbold uppercase" data-action="collapse-all"><i class="fa fa-minus"></i>收起</button>
                 </span>
                 <button id="save" type="button" class="btn blue btn-outline sbold uppercase" data-action="collapse-all" disabled="disabled"><i class="fa fa-save"></i>保存</button>
-                <button id="refresh" type="button" class="btn yellow btn-outline sbold uppercase" data-action="collapse-all"><i class="fa fa-refresh"></i>刷新</button>
+<!--                <button id="refresh" type="button" class="btn yellow btn-outline sbold uppercase" data-action="collapse-all"><i class="fa fa-refresh"></i>刷新</button>-->
             </div>
             <div class="portlet-body ">
                 <div class="dd" id="nestable_list_1">

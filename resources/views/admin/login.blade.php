@@ -454,6 +454,7 @@
         <!-- END THEME LAYOUT SCRIPTS -->
         <script>
             $('.login-form').validator().on('submit', function (e) {
+                console.log('test');
             if (!e.isDefaultPrevented()) {
                 layer.load(1, {shade: [0.1, '#fff']});
                     $.ajax({
