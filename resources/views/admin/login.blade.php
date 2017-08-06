@@ -46,7 +46,7 @@
         <!-- BEGIN LOGIN -->
         <div class="content">
             <!-- BEGIN LOGIN FORM -->
-            <form id="login_form" class="login-form" method="post">
+            <form class="login-form">
                 <h3 class="form-title">Login to your account</h3>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="form-group">
@@ -453,33 +453,31 @@
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <!-- END THEME LAYOUT SCRIPTS -->
         <script>
-            $('.login_form').validator().on('submit', function (e) {
-                console.log('1');
+            $('.login-form').validator().on('submit', function (e) {
             if (!e.isDefaultPrevented()) {
-                console.log('2');
-//                layer.load(1, {shade: [0.1, '#fff']});
-//                    $.ajax({
-//                      url:"{{asset(config('admin.prefix').'/login')}}", 
-//                      type:"post",
-//                      dataType:"json",
-//                      data:$(".login-form").serialize(),
-//                      success:function(res){
-//                        layer.closeAll();
-//                        if (res.status == 1) {
-//                            layer.msg(res.msg, {icon: 1});
-//                            @if(Session::has('url.intented'))
-//                                location.href = "{{Session::get('url.intented')}}";
-//                                @php
-//                                Session::forget('url.intented');
-//                                @endphp
-//                            @else
-//                                location.href = "{{asset(config('admin.prefix'))}}";
-//                            @endif
-//                        }else{
-//                            layer.msg(res.msg, {icon: 5});
-//                        }
-//                      }
-//                    });
+                layer.load(1, {shade: [0.1, '#fff']});
+                    $.ajax({
+                      url:"{{asset(config('admin.prefix').'/login')}}", 
+                      type:"post",
+                      dataType:"json",
+                      data:$(".login-form").serialize(),
+                      success:function(res){
+                        layer.closeAll();
+                        if (res.status == 1) {
+                            layer.msg(res.msg, {icon: 1});
+                            @if(Session::has('url.intented'))
+                                location.href = "{{Session::get('url.intented')}}";
+                                @php
+                                Session::forget('url.intented');
+                                @endphp
+                            @else
+                                location.href = "{{asset(config('admin.prefix'))}}";
+                            @endif
+                        }else{
+                            layer.msg(res.msg, {icon: 5});
+                        }
+                      }
+                    });
             }
             return false;
     })
