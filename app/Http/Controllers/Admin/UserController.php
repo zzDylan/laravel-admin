@@ -19,10 +19,17 @@ class UserController extends Controller {
         if ($request->ajax()) {
             $userModel = config('admin.database.users_model');
             if ($request->input('search')) {
-                $users = $userModel::where('username', 'like', $request->input('search') . '%')->offset($request->input('offset'))->limit($request->input('limit'))->get();
+                $users = $userModel::
+                        where('username', 'like', $request->input('search') . '%')
+                        ->offset($request->input('offset'))
+                        ->limit($request->input('limit'))
+                        ->get();
                 $total = $userModel::where('username', 'like', $request->input('search') . '%')->count();
             } else {
-                $users = $userModel::offset($request->input('offset'))->limit($request->input('limit'))->get();
+                $users = $userModel::
+                        offset($request->input('offset'))
+                        ->limit($request->input('limit'))
+                        ->get();
                 $total = $userModel::count();
             }
             $userData = [];
@@ -71,8 +78,8 @@ class UserController extends Controller {
         $input = $request->all();
         Validator::make($input, $rule)->validate();
         $adminModel = config('admin.database.users_model');
-        if($adminModel::where('username',$input['username'])->exists()){
-            return ['status'=>0,'msg'=>'用户名已存在'];
+        if ($adminModel::where('username', $input['username'])->exists()) {
+            return ['status' => 0, 'msg' => '用户名已存在'];
         }
         $roleUsersTable = config('admin.database.role_users_table');
         $userPermissionsTable = config('admin.database.user_permissions_table');

@@ -19,10 +19,16 @@ class RoleController extends Controller {
         if ($request->ajax()) {
             $roleModel = config('admin.database.roles_model');
             if ($request->input('search')) {
-                $roles = $roleModel::where('name', 'like', $request->input('search') . '%')->offset($request->input('offset'))->limit($request->input('limit'))->get();
+                $roles = $roleModel::where('name', 'like', $request->input('search') . '%')
+                        ->offset($request->input('offset'))
+                        ->limit($request->input('limit'))
+                        ->get();
                 $total = $roleModel::where('name', 'like', $request->input('search') . '%')->count();
             } else {
-                $roles = $roleModel::offset($request->input('offset'))->limit($request->input('limit'))->get();
+                $roles = $roleModel::
+                        offset($request->input('offset'))
+                        ->limit($request->input('limit'))
+                        ->get();
                 $total = $roleModel::count();
             }
             $roleData = [];
@@ -94,7 +100,16 @@ class RoleController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        
+        $roleModel = config('admin.database.roles_model');
+        $permissionModel = config('admin.database.permissions_model');
+        $allPermissions = $permissionModel::all();
+        $role = $roleModel::find($id);
+        $targetPermissions = $role->permissions;
+        return view('admin.role.edit', [
+            'role' => $role,
+            'targetPermissions' => $targetPermissions,
+            'allPermissions' => $allPermissions
+        ]);
     }
 
     /**
@@ -105,7 +120,33 @@ class RoleController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        
+        $rule = [
+            'name' => 'required',
+            'slug' => 'required'
+        ];
+        $input = $request->all();
+        Validator::make($input, $rule)->validate();
+        $roleModel = config('admin.database.roles_model');
+        $rolePermissionsTable = config('admin.database.role_permissions_table');
+        $role = $roleModel::find($id);
+        try {
+            $role->update([
+                'name' => $input['name'],
+                'slug' => $input['slug']
+            ]);
+            if (isset($input['permissions']) && is_array($input['permissions'])) {
+                DB::table($rolePermissionsTable)->where('role_id', $id)->delete();
+                foreach ($input['permissions'] as $permission) {
+                    DB::table($rolePermissionsTable)->insert([
+                        'permission_id' => $permission,
+                        'role_id' => $id
+                    ]);
+                }
+            }
+        } catch (\Exception $e) {
+            return ['status' => 0, 'msg' => $e->getMessage()];
+        }
+        return ['status' => 1, 'msg' => '修改成功!'];
     }
 
     /**

@@ -1,6 +1,7 @@
 @extends('admin.layouts.base')
 @section('content')
 <div class="row">
+    @if(Auth::guard('admin')->user()->checkPermission('menu.nestable'))
     <div class="col-md-6">
         <div class="portlet light bordered">
             <div class="portlet-title">
@@ -18,6 +19,9 @@
             </div>
         </div>
     </div>
+    @endif
+    
+    @if(Auth::guard('admin')->user()->checkPermission('menu.create'))
     <div class="col-md-6">
         <div class="portlet light bordered">
             <div class="portlet-title">
@@ -97,6 +101,7 @@
             </div>
         </div>
     </div>
+    @endif
 </div>
 @endsection
 @section('otherjs')

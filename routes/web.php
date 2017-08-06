@@ -12,9 +12,6 @@
  */
 
 Route::get('/', function () {
-    $array = [];
-    Illuminate\Support\Arr::set($array, 'admin.test', 1);
-    dd($array);
     return view('welcome');
 });
 Route::get('/test3', 'Admin\MenuController@test3');
@@ -39,7 +36,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         //修改菜单操作
         Route::put('/', 'MenuController@update')->middleware('permission:menu.edit');
         //菜单删除操作
-        Route::delete('/{id}', 'MenuController@delete')->middleware('permission:menu.delete');
+        Route::delete('/{id}', 'MenuController@destroy')->middleware('permission:menu.destroy');
     });
     //用户管理
     Route::group(['prefix' => 'user'], function() {
@@ -54,9 +51,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         //用户修改操作
         Route::put('/', 'UserController@update')->middleware('permission:user.edit');
         //用户删除操作
-        Route::delete('/{id}', 'UserController@delete')->middleware('permission:user.delete');
+        Route::delete('/{id}', 'UserController@destroy')->middleware('permission:user.destroy');
         //用户批量删除操作
-        Route::post('/batch_destroy', 'UserController@batchDestroy')->middleware('permission:user.delete');
+        Route::post('/batch_destroy', 'UserController@batchDestroy')->middleware('permission:user.destroy');
     });
     //角色管理
     Route::group(['prefix' => 'role'], function() {
@@ -69,11 +66,11 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         //角色修改页面
         Route::get('/{id}/edit', 'RoleController@edit')->middleware('permission:role.edit');
         //角色修改操作
-        Route::put('/', 'RoleController@update')->middleware('permission:role.edit');
+        Route::put('/{id}', 'RoleController@update')->middleware('permission:role.edit');
         //角色删除操作
-        Route::delete('/{id}', 'RoleController@delete')->middleware('permission:role.delete');
+        Route::delete('/{id}', 'RoleController@destroy')->middleware('permission:role.destroy');
         //角色批量删除操作
-        Route::post('/batch_destroy', 'RoleController@batchDestroy')->middleware('permission:role.delete');
+        Route::post('/batch_destroy', 'RoleController@batchDestroy')->middleware('permission:role.destroy');
     });
     //权限管理
     Route::group(['prefix' => 'permission'], function() {
@@ -86,10 +83,10 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         //权限修改页面
         Route::get('/{id}/edit', 'PermissionController@edit')->middleware('permission:permission.edit');
         //权限修改操作
-        Route::put('/', 'PermissionController@update')->middleware('permission:permission.edit');
+        Route::put('/{id}', 'PermissionController@update')->middleware('permission:permission.edit');
         //权限删除操作
-        Route::delete('/{id}', 'PermissionController@delete')->middleware('permission:permission.delete');
+        Route::delete('/{id}', 'PermissionController@destroy')->middleware('permission:permission.destroy');
         //权限批量删除操作
-        Route::post('/batch_destroy', 'PermissionController@batchDestroy')->middleware('permission:permission.delete');
+        Route::post('/batch_destroy', 'PermissionController@batchDestroy')->middleware('permission:permission.destroy');
     });
 });

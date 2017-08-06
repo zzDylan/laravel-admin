@@ -19,10 +19,17 @@ class PermissionController extends Controller {
         if ($request->ajax()) {
             $permissionModel = config('admin.database.permissions_model');
             if ($request->input('search')) {
-                $permissions = $permissionModel::where('name', 'like', $request->input('search') . '%')->offset($request->input('offset'))->limit($request->input('limit'))->get();
+                $permissions = $permissionModel::
+                        where('name', 'like', $request->input('search') . '%')
+                        ->offset($request->input('offset'))
+                        ->limit($request->input('limit'))
+                        ->get();
                 $total = $permissionModel::where('name', 'like', $request->input('search') . '%')->count();
             } else {
-                $permissions = $permissionModel::offset($request->input('offset'))->limit($request->input('limit'))->get();
+                $permissions = $permissionModel::
+                        offset($request->input('offset'))
+                        ->limit($request->input('limit'))
+                        ->get();
                 $total = $permissionModel::count();
             }
             $permissionData = [];
@@ -83,7 +90,9 @@ class PermissionController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        
+        $permissionModel = config('admin.database.permissions_model');
+        $permission = $permissionModel::find($id);
+        return view('admin.permission.edit', ['permission' => $permission]);
     }
 
     /**
@@ -94,7 +103,23 @@ class PermissionController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        
+        $rule = [
+            'name' => 'required',
+            'slug' => 'required'
+        ];
+        $input = $request->all();
+        Validator::make($input, $rule)->validate();
+        $permissionModel = config('admin.database.permissions_model');
+        $permission = $permissionModel::find($id);
+        try {
+            $permission->update([
+                'name' => $input['name'],
+                'slug' => $input['slug']
+            ]);
+        } catch (\Exception $e) {
+            return ['status' => 0, 'msg' => $e->getMessage()];
+        }
+        return ['status' => 1, 'msg' => '修改成功!'];
     }
 
     /**
@@ -104,8 +129,8 @@ class PermissionController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        $roleModel = config('admin.database.roles_model');
-        $roleModel::destroy($id);
+        $permissionModel = config('admin.database.permissions_model');
+        $permissionModel::destroy($id);
         return ['status' => 1, 'msg' => '删除成功!'];
     }
 

@@ -180,7 +180,7 @@ License: You must have a valid license purchased only from themeforest(the above
                     </div>
                     <!-- END PAGE HEAD-->
                     <!-- BEGIN PAGE BREADCRUMB -->
-                    <ul class="page-breadcrumb breadcrumb">
+<!--                    <ul class="page-breadcrumb breadcrumb">
                         <li>
                             <a href="/admin">Home</a>
                             <i class="fa fa-circle"></i>
@@ -192,7 +192,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         <li>
                             <span class="active">Page Layouts</span>
                         </li>
-                    </ul>
+                    </ul>-->
                     <!-- END PAGE BREADCRUMB -->
                     <!-- BEGIN PAGE BASE CONTENT -->
                     <div>
@@ -259,26 +259,12 @@ License: You must have a valid license purchased only from themeforest(the above
         <script src="{{asset('packages/admin/tableExport.jquery.plugin/tableExport.min.js')}}"></script>
         <script src="{{asset('packages/admin/bootstrap-table/dist/extensions/export/bootstrap-table-export.js')}}"></script>
         <script src="{{asset('packages/admin/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.js')}}"></script>
-        
         <script>
-$.ajaxSetup({
-headers: {
-'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-}
-});
-toastr.options = {
-closeButton: true,
-        progressBar: true,
-        showMethod: 'slideDown',
-        timeOut: 4000
-};
-@if (Session::has('toastr'))
-        @php
-        $type = session('toastr.type');
-$message = session('toastr.message');
-@endphp
-        toastr.{{$type}}('{{$message}}');
-@endif
+            $.ajaxSetup({
+                headers: {
+                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
         </script>
         @yield('otherjs')
     </body>

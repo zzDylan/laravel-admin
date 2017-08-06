@@ -46,37 +46,28 @@
         <!-- BEGIN LOGIN -->
         <div class="content">
             <!-- BEGIN LOGIN FORM -->
-            <form class="login-form" action="/admin/login" method="post">
+            <form class="login-form">
                 <h3 class="form-title">Login to your account</h3>
-                @if ($errors->has('username'))
-                    @foreach ($errors->get('username') as $message) 
-                        <div class="alert alert-danger">
-                            <button class="close" data-close="alert"></button>
-                            <span> {{$message}} </span>
-                        </div>
-                    @endforeach
-                @endif
-                
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="form-group">
                     <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
                     <label class="control-label visible-ie8 visible-ie9">Username</label>
                     <div class="input-icon">
                         <i class="fa fa-user"></i>
-                        <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" name="username"  value="{{old('username')}}"/> </div>
+                        <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" name="username"  value="" required> </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label visible-ie8 visible-ie9">Password</label>
                     <div class="input-icon">
                         <i class="fa fa-lock"></i>
-                        <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password" /> </div>
+                        <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password" required> </div>
                 </div>
                 <div class="form-actions">
                     <label class="rememberme mt-checkbox mt-checkbox-outline">
                         <input type="checkbox" name="remember" value="1" /> Remember me
                         <span></span>
                     </label>
-                    <button type="submit" class="btn green pull-right"> Login </button>
+                    <button id="login_button" type="submit" class="btn green pull-right"> Login </button>
                 </div>
                 <div class="login-options">
                     <h4>Or login with</h4>
@@ -123,7 +114,7 @@
             </form>
             <!-- END FORGOT PASSWORD FORM -->
             <!-- BEGIN REGISTRATION FORM -->
-            <form class="register-form" action="index.html" method="post">
+            <form class="register-form">
                 <h3>Sign Up</h3>
                 <p> Enter your personal details below: </p>
                 <div class="form-group">
@@ -423,7 +414,7 @@
                 </div>
                 <div class="form-actions">
                     <button id="register-back-btn" type="button" class="btn red btn-outline"> Back </button>
-                    <button type="submit" id="register-submit-btn" class="btn green pull-right"> Sign Up </button>
+                    <button type="button" id="register-submit-btn" class="btn green pull-right"> Sign Up </button>
                 </div>
             </form>
             <!-- END REGISTRATION FORM -->
@@ -456,17 +447,40 @@
         <!-- END THEME GLOBAL SCRIPTS -->
         <!-- BEGIN PAGE LEVEL SCRIPTS -->
         <script src="{{asset('assets/pages/scripts/login-4.min.js')}}" type="text/javascript"></script>
+        <script src="{{asset('js/layer/layer.js')}}" type="text/javascript"></script>
+        <script src="{{asset('packages/admin/bootstrap-validator/dist/validator.min.js')}}" type="text/javascript"></script>
         <!-- END PAGE LEVEL SCRIPTS -->
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <!-- END THEME LAYOUT SCRIPTS -->
         <script>
-            $(document).ready(function()
-            {
-                $('#clickmewow').click(function()
-                {
-                    $('#radio1003').attr('checked', 'checked');
-                });
-            })
+            $('.login-form').validator().on('submit', function (e) {
+            if (!e.isDefaultPrevented()) {
+                layer.load(1, {shade: [0.1, '#fff']});
+                    $.ajax({
+                      url:"{{asset(config('admin.prefix').'/login')}}", 
+                      type:"post",
+                      dataType:"json",
+                      data:$(".login-form").serialize(),
+                      success:function(res){
+                        layer.closeAll();
+                        if (res.status == 1) {
+                            layer.msg(res.msg, {icon: 1});
+                            @if(Session::has('url.intented'))
+                                location.href = "{{Session::get('url.intented')}}";
+                                @php
+                                Session::forget('url.intented');
+                                @endphp
+                            @else
+                                location.href = "{{asset(config('admin.prefix'))}}";
+                            @endif
+                        }else{
+                            layer.msg(res.msg, {icon: 5});
+                        }
+                      }
+                    });
+            }
+            return false;
+    })
         </script>
     </body>
 
