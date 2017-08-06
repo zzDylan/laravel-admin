@@ -46,7 +46,7 @@
         <!-- BEGIN LOGIN -->
         <div class="content">
             <!-- BEGIN LOGIN FORM -->
-            <form class="login-form" method="post">
+            <form id="login_form" class="login-form" method="post">
                 <h3 class="form-title">Login to your account</h3>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="form-group">
@@ -453,7 +453,7 @@
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <!-- END THEME LAYOUT SCRIPTS -->
         <script>
-            $('.login-form').validator().on('submit', function (e) {
+            $('.login_form').validator().on('submit', function (e) {
                 console.log('1');
             if (!e.isDefaultPrevented()) {
                 console.log('2');
