@@ -454,31 +454,32 @@
         <!-- END THEME LAYOUT SCRIPTS -->
         <script>
             $('.login-form').validator().on('submit', function (e) {
-                console.log('test');
+                console.log('1');
             if (!e.isDefaultPrevented()) {
-                layer.load(1, {shade: [0.1, '#fff']});
-                    $.ajax({
-                      url:"{{asset(config('admin.prefix').'/login')}}", 
-                      type:"post",
-                      dataType:"json",
-                      data:$(".login-form").serialize(),
-                      success:function(res){
-                        layer.closeAll();
-                        if (res.status == 1) {
-                            layer.msg(res.msg, {icon: 1});
-                            @if(Session::has('url.intented'))
-                                location.href = "{{Session::get('url.intented')}}";
-                                @php
-                                Session::forget('url.intented');
-                                @endphp
-                            @else
-                                location.href = "{{asset(config('admin.prefix'))}}";
-                            @endif
-                        }else{
-                            layer.msg(res.msg, {icon: 5});
-                        }
-                      }
-                    });
+                console.log('2');
+//                layer.load(1, {shade: [0.1, '#fff']});
+//                    $.ajax({
+//                      url:"{{asset(config('admin.prefix').'/login')}}", 
+//                      type:"post",
+//                      dataType:"json",
+//                      data:$(".login-form").serialize(),
+//                      success:function(res){
+//                        layer.closeAll();
+//                        if (res.status == 1) {
+//                            layer.msg(res.msg, {icon: 1});
+//                            @if(Session::has('url.intented'))
+//                                location.href = "{{Session::get('url.intented')}}";
+//                                @php
+//                                Session::forget('url.intented');
+//                                @endphp
+//                            @else
+//                                location.href = "{{asset(config('admin.prefix'))}}";
+//                            @endif
+//                        }else{
+//                            layer.msg(res.msg, {icon: 5});
+//                        }
+//                      }
+//                    });
             }
             return false;
     })
