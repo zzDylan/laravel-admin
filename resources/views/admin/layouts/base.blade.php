@@ -77,7 +77,7 @@ License: You must have a valid license purchased only from themeforest(the above
                     <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
                     <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
                     <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-                    {{--@include('admin.layouts.menu')--}}
+                    @include('admin.layouts.menu')
                     <!-- END SIDEBAR MENU -->
                 </div>
                 <!-- END SIDEBAR -->
