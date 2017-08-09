@@ -14,7 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/test3', 'Admin\MenuController@test3');
+for($i=0;$i<50;$i++){
+    Route::get('/admin/test'.$i,function(){
+        return view('test');
+    });
+}
 Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
     Route::get('login', 'AuthController@getLogin');
     Route::post('login', 'AuthController@postLogin');
@@ -32,9 +36,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         //添加操作
         Route::post('/', 'MenuController@store')->middleware('permission:menu.create');
         //修改菜单页面
-        Route::get('/{id}', 'MenuController@edit')->middleware('permission:menu.edit');
+        Route::get('/{id}/edit', 'MenuController@edit')->middleware('permission:menu.edit');
         //修改菜单操作
-        Route::put('/', 'MenuController@update')->middleware('permission:menu.edit');
+        Route::put('/{id}', 'MenuController@update')->middleware('permission:menu.edit');
         //菜单删除操作
         Route::delete('/{id}', 'MenuController@destroy')->middleware('permission:menu.destroy');
     });
@@ -49,7 +53,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         //用户修改页面
         Route::get('/{id}/edit', 'UserController@edit')->middleware('permission:user.edit');
         //用户修改操作
-        Route::put('/', 'UserController@update')->middleware('permission:user.edit');
+        Route::put('/{id}', 'UserController@update')->middleware('permission:user.edit');
         //用户删除操作
         Route::delete('/{id}', 'UserController@destroy')->middleware('permission:user.destroy');
         //用户批量删除操作

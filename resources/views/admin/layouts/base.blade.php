@@ -91,8 +91,8 @@ License: You must have a valid license purchased only from themeforest(the above
                     <div class="page-head">
                         <!-- BEGIN PAGE TITLE -->
                         <div class="page-title">
-                            <h1>Blank Page Layout
-                                <small>blank page layout</small>
+                            <h1>{{$title or ''}}
+<!--                                <small>blank page layout</small>-->
                             </h1>
                         </div>
                         <!-- END PAGE TITLE -->

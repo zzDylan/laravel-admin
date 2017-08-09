@@ -137,6 +137,12 @@ class UserController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
+        if($id==1){
+            return ['status'=>0,'msg'=>'无法删除顶级管理员'];
+        }
+        if($id==Auth::guard('admin')->user()->id){
+            return ['status'=>0,'msg'=>'无法删除自己'];
+        }
         $userModel = config('admin.database.users_model');
         $userModel::destroy($id);
         return ['status' => 1, 'msg' => '删除成功!'];
@@ -151,6 +157,9 @@ class UserController extends Controller {
             'ids' => 'required|array',
         ];
         $input = $request->all();
+        if(in_array(1,$input['ids'])){
+            return ['status'=>0,'msg'=>'无法删除顶级管理员'];
+        }
         Validator::make($input, $rule)->validate();
         $userModel = config('admin.database.users_model');
         $userModel::destroy($input['ids']);

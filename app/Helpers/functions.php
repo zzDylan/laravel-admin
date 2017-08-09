@@ -5,15 +5,19 @@
  * @param type $type
  * @param type $message
  */
-function admin_toastr($type,$message){
-    $toastr = ['type'=>$type,'message'=>$message];
+function admin_toastr($type, $message) {
+    $toastr = ['type' => $type, 'message' => $message];
     \Illuminate\Support\Facades\Session::flash('toastr', $toastr);
 }
 
-
-function is_pjax(){
-    if(Request::header('X-PJAX')){
-        return true;
+/**
+ * 判断左侧菜单是否active
+ * @param type $url
+ * @return string
+ */
+function is_active($url) {
+    if (url($url) == Request::url()) {
+        return 'active open';
     }
-    return false;
+    return '';
 }

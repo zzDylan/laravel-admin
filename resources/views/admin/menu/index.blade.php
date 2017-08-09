@@ -106,7 +106,7 @@
 @endsection
 @section('otherjs')
 <script>
-    $('#addForm').validator({focus: false})
+    $('#addForm').validator({focus: false,disable:false})
     $('#roles').select2();
     $('.icon').iconpicker();
     $('.dd').nestable();

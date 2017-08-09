@@ -3,7 +3,7 @@
 <div class="portlet box green">
     <div class="portlet-title">
         <div class="caption">
-            <i class="fa fa-gift"></i>Form Actions On Bottom </div>
+            <i class="fa fa-gift"></i>添加角色</div>
         <!--        <div class="tools">
                     <a href="javascript:;" class="collapse"> </a>
                     <a href="#portlet-config" data-toggle="modal" class="config"> </a>
@@ -67,7 +67,7 @@
 @section('otherjs')
 <script>
     $('.select2').select2();
-    $('#addForm').validator().on('submit', function (e) {
+    $('#addForm').validator({disable:false}).on('submit', function (e) {
         if (!e.isDefaultPrevented()) {
             layer.load(1, {shade: [0.1, '#fff']});
             $.ajax({
