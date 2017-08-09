@@ -15,12 +15,12 @@
                     <table data-toggle="table">
                         <tbody>
                             <tr>
-                                <td>DolphinPHP版本</td>
+                                <td>版本</td>
                                 <td>1.0.0beta</td>
                             </tr>
                             <tr>
-                                <td>ThinkPHP版本</td>
-                                <td>5.0.3</td>
+                                <td>laravel版本</td>
+                                <td>5.4</td>
                             </tr>
                             <tr>
                                 <td>服务器操作系统</td>
