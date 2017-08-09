@@ -20,31 +20,31 @@
                             </tr>
                             <tr>
                                 <td>laravel版本</td>
-                                <td>5.4</td>
+                                <td>XX</td>
                             </tr>
                             <tr>
                                 <td>服务器操作系统</td>
-                                <td>Linux</td>
+                                <td>XX</td>
                             </tr>
                             <tr>
                                 <td>运行环境</td>
-                                <td>Apache</td>
+                                <td>XX</td>
                             </tr>
                             <tr>
                                 <td>MYSQL版本</td>
-                                <td>5.5.49</td>
+                                <td>XX</td>
                             </tr>
                             <tr>
                                 <td>PHP版本</td>
-                                <td>5.6.21</td>
+                                <td>XX</td>
                             </tr>
                             <tr>
                                 <td>上传限制</td>
-                                <td>2M</td>
+                                <td>XX</td>
                             </tr>
                             <tr>
                                 <td>POST限制</td>
-                                <td>8M</td>
+                                <td>XX</td>
                             </tr>
                         </tbody>
                     </table>
