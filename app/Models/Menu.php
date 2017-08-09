@@ -39,10 +39,27 @@ class Menu extends Model {
         if (!empty($menuIds)) {
             $allChildrenIds = array_merge($menuIds, $allChildrenIds);
             foreach ($menuIds as $menuId) {
-                self::allChildrenIds($menuId,$allChildrenIds);
+                self::allChildrenIds($menuId, $allChildrenIds);
             }
         }
         return $allChildrenIds;
+    }
+
+    public static function allChildrenUrls($id, &$allChildrenUrls = []) {
+        $menus = self::where('parent_id', $id); 
+        $menuIds = $menus->pluck('id')->toArray();
+        if (!empty($menuIds)) {
+            $menuUris = $menus->pluck('uri')->toArray();
+            foreach($menuUris as $key=>$menuUri){
+                $menuUris[$key] = config('admin.prefix').'/'.$menuUri;
+            }
+            $menuUrls = array_map('url', $menuUris);
+            $allChildrenUrls = array_merge($menuUrls, $allChildrenUrls);
+            foreach ($menuIds as $menuId) {
+                self::allChildrenIds($menuId, $allChildrenUrls);
+            }
+        }
+        return $allChildrenUrls;
     }
 
 }

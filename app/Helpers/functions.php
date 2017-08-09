@@ -12,11 +12,14 @@ function admin_toastr($type, $message) {
 
 /**
  * 判断左侧菜单是否active
- * @param type $url
+ * @param type $menu_id
  * @return string
  */
-function is_active($url) {
-    if (url($url) == Request::url()) {
+function is_active($menu_id) {
+    $menuModel = config('admin.database.menu_model');
+    $currentUrl = url(config('admin.prefix').'/'.$menuModel::find($menu_id)->uri);
+    $allChildrenUrls = $menuModel::allChildrenUrls($menu_id);
+    if (in_array(Request::url(), $allChildrenUrls) || Request::url() == $currentUrl) {
         return 'active open';
     }
     return '';
