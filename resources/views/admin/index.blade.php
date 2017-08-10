@@ -12,7 +12,7 @@
             </div>
             <div class="portlet-body">
                 <div class="table-scrollable">
-                    <table data-toggle="table">
+                    <table class="table table-hover">
                         <tbody>
                             <tr>
                                 <td>版本</td>
@@ -20,31 +20,31 @@
                             </tr>
                             <tr>
                                 <td>laravel版本</td>
-                                <td>XX</td>
+                                <td>5.4.32</td>
                             </tr>
                             <tr>
                                 <td>服务器操作系统</td>
-                                <td>XX</td>
+                                <td>{{PHP_OS}}</td>
                             </tr>
                             <tr>
                                 <td>运行环境</td>
-                                <td>XX</td>
+                                <td>{{$_SERVER["SERVER_SOFTWARE"]}}</td>
                             </tr>
-                            <tr>
+<!--                            <tr>
                                 <td>MYSQL版本</td>
-                                <td>XX</td>
-                            </tr>
+                                <td></td>
+                            </tr>-->
                             <tr>
                                 <td>PHP版本</td>
-                                <td>XX</td>
+                                <td>{{PHP_VERSION}}</td>
                             </tr>
                             <tr>
                                 <td>上传限制</td>
-                                <td>XX</td>
+                                <td>{{ini_get('upload_max_filesize')}}</td>
                             </tr>
                             <tr>
                                 <td>POST限制</td>
-                                <td>XX</td>
+                                <td>{{ini_get('post_max_size')}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -54,4 +54,8 @@
     </div>
 </div>
 
+@endsection
+@section('js')
+<script>
+</script>
 @endsection

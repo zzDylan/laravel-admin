@@ -254,7 +254,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <script src="{{asset('js/layer/layer.js')}}" type="text/javascript"></script>
         <script src="{{asset('packages/admin/bootstrap-validator/dist/validator.min.js')}}" type="text/javascript"></script>
 <!--        <script src="{{asset('packages/admin/nprogress/nprogress.js')}}"></script>-->
-        <script src="{{asset('packages/admin/bootstrap-table/dist/bootstrap-table.min.js')}}"></script>
+        <script src="{{asset('packages/admin/bootstrap-table/dist/bootstrap-table.js')}}"></script>
         <script src="{{asset('packages/admin/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js')}}"></script>
         <script src="{{asset('packages/admin/tableExport.jquery.plugin/tableExport.min.js')}}"></script>
         <script src="{{asset('packages/admin/bootstrap-table/dist/extensions/export/bootstrap-table-export.js')}}"></script>
