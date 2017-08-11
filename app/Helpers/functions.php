@@ -24,3 +24,13 @@ function is_active($menu_id) {
     }
     return '';
 }
+
+/**
+ * 返回定时器报错页面
+ * @param type $type
+ * @param type $message
+ * @return view
+ */
+function jump($message, $jumpUrl = '/admin/commodity', $type = 'error') {
+	return view('jump', ['type' => $type, 'jumpUrl' => $jumpUrl, 'message' => $message]);
+}
