@@ -28,7 +28,7 @@ class Permission {
         }
         $allPermissions = Auth::guard('admin')->user()->allPermissions();
         if (!in_array($permission, $allPermissions)) {
-            return abort(403,'权限不足');
+            return response(jump('权限不足'));
         }
         return $next($request);
     }

@@ -207,6 +207,9 @@ class UserController extends Controller {
         if(in_array(1,$input['ids'])){
             return ['status'=>0,'msg'=>'无法删除顶级管理员'];
         }
+        if(in_array(Auth::guard('admin')->user()->id,$input['ids'])){
+            return ['status'=>0,'msg'=>'无法删除自己'];
+        }
         Validator::make($input, $rule)->validate();
         $userModel = config('admin.database.users_model');
         $userModel::destroy($input['ids']);
