@@ -81,7 +81,7 @@
                             <label class="col-md-3 control-label">角色</label>
                             <div class="col-md-8">
                                 <div class="help-block with-errors"></div>
-                                <select id="roles" name="roles[]" class="form-control" multiple required>
+                                <select id="roles" name="roles[]" class="form-control" multiple>
                                     @foreach($roles as $role)
                                     <option value="{{$role->id}}">{{$role->name}}</option>
                                     @endforeach
