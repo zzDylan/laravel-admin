@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use DB;
+use Auth;
 
 class UserController extends Controller {
 
@@ -116,7 +117,16 @@ class UserController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        
+        if ($id == 1 && Auth::guard('admin')->user()->id != 1) {
+            return jump('无权访问');
+        }
+        $adminModel = config('admin.database.users_model');
+        $roleModel = config('admin.database.roles_model');
+        $permissionModel = config('admin.database.permissions_model');
+        $user = $adminModel::find($id);
+        $roles = $roleModel::all();
+        $permissions = $permissionModel::all();
+        return view('admin.user.edit', ['user' => $user, 'roles' => $roles, 'permissions' => $permissions]);
     }
 
     /**
@@ -127,7 +137,44 @@ class UserController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        
+        $rule = [
+            'username' => 'required',
+            'name' => 'required',
+            'password' => 'required'
+        ];
+        $input = $request->all();
+        Validator::make($input, $rule)->validate();
+        $adminModel = config('admin.database.users_model');
+        $user = $adminModel::find($id);
+        $user->username = $input['username'];
+        $user->name = $input['name'];
+        if ($request->input('password') != $user->password) {
+            $user->password = bcrypt($input['password']);
+        }
+        try {
+            $user->save();
+            DB::table(config('admin.database.role_users_table'))->where('user_id', $id)->delete();
+            if (isset($input['roles']) && is_array($input['roles'])) {
+                foreach ($input['roles'] as $role) {
+                    DB::table('admin_role_users')->insert([
+                        'user_id' => $id,
+                        'role_id' => $role
+                    ]);
+                }
+            }
+            DB::table(config('admin.database.user_permissions_table'))->where('user_id', $id)->delete();
+            if (isset($input['permissions']) && is_array($input['permissions'])) {
+                foreach ($input['permissions'] as $permission) {
+                    DB::table('admin_user_permissions')->insert([
+                        'permission_id' => $permission,
+                        'user_id' => $id
+                    ]);
+                }
+            }
+        } catch (\Exception $e) {
+            return ['status' => 0, 'msg' => $e->getMessage()];
+        }
+        return ['status' => 1, 'msg' => '修改成功!'];
     }
 
     /**
