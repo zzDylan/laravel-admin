@@ -67,7 +67,7 @@
                     <label class="col-md-3 control-label">角色</label>
                     <div class="col-md-8">
                         <div class="help-block with-errors"></div>
-                        <select style="width: 100%;" name="roles[]" class="form-control select2" multiple required>
+                        <select style="width: 100%;" name="roles[]" class="form-control select2" multiple>
                             @foreach($roles as $role)
                             <option @if(in_array($role->id,$user->roles->pluck('id')->toArray())) selected @endif  value="{{$role->id}}">{{$role->name}}</option>
                             @endforeach

@@ -38,6 +38,9 @@ class UserController extends Controller {
                 $userData[$key]['id'] = $user->id;
                 $userData[$key]['username'] = $user->username;
                 $userData[$key]['roles'] = $user->roles->pluck('name')->toArray();
+                if($user->id == 1){
+                    $userData[$key]['roles'][] = '顶级管理员';
+                }
                 $userData[$key]['created_at'] = (string) $user->created_at;
                 $userData[$key]['updated_at'] = (string) $user->updated_at;
             }

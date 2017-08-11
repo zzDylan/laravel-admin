@@ -31,6 +31,6 @@ function is_active($menu_id) {
  * @param type $message
  * @return view
  */
-function jump($message, $jumpUrl = '/admin/commodity', $type = 'error') {
+function jump($message, $jumpUrl = '/admin', $type = 'error') {
 	return view('jump', ['type' => $type, 'jumpUrl' => $jumpUrl, 'message' => $message]);
 }
