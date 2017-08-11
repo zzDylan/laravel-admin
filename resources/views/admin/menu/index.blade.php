@@ -115,14 +115,14 @@
     });
     $('#save').click(function () {
         var nestable = $('.dd').nestable('serialize');
-        console.log(nestable);
+        layer.load(1, {shade: [0.1, '#fff']});
         $.post('/admin/menu/nestable', {"nestable": nestable}, function (res) {
+            layer.closeAll();
             if (res.status == 0) {
                 layer.msg(res.msg, {icon: 5});
             } else {
-                layer.msg(res.msg, {icon: 1}, function () {
-                    location.href = "{{asset(config('admin.prefix').'/menu')}}";
-                });
+                layer.msg(res.msg, {icon: 1});
+                location.href = "{{asset(config('admin.prefix').'/menu')}}";
             }
         });
     });
