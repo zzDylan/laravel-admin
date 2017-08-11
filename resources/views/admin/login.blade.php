@@ -129,7 +129,7 @@
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <!-- END THEME LAYOUT SCRIPTS -->
         <script>
-            $('#login-form').validator().on('submit', function (e) {
+            $('#login-form').validator({disable:false}).on('submit', function (e) {
             if (!e.isDefaultPrevented()) {
                 layer.load(1, {shade: [0.1, '#fff']});
                     $.ajax({
