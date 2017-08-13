@@ -36,8 +36,7 @@ class MenuController extends Controller {
             'parent_id' => 'required',
             'title' => 'required',
             'icon' => 'required',
-            'uri' => 'required',
-            'roles' => 'required|array',
+            'uri' => 'required'
         ];
         $input = $request->all();
         Validator::make($input, $rule)->validate();
@@ -49,11 +48,13 @@ class MenuController extends Controller {
                         'icon' => $input['icon'],
                         'uri' => $input['uri']
             ]);
-            foreach ($input['roles'] as $role) {
-                DB::table(config('admin.database.role_menu_table'))->insert([
-                    'role_id' => $role,
-                    'menu_id' => $menu->id
-                ]);
+            if (isset($input['roles']) && is_array($input['roles'])) {
+                foreach ($input['roles'] as $role) {
+                    DB::table(config('admin.database.role_menu_table'))->insert([
+                        'role_id' => $role,
+                        'menu_id' => $menu->id
+                    ]);
+                }
             }
         } catch (\Exception $e) {
             return ['status' => 0, 'msg' => $e->getMessage()];
@@ -93,8 +94,7 @@ class MenuController extends Controller {
             'parent_id' => 'required',
             'title' => 'required',
             'icon' => 'required',
-            'uri' => 'required',
-            'roles' => 'required|array',
+            'uri' => 'required'
         ];
         $input = $request->all();
         Validator::make($input, $rule)->validate();
@@ -111,6 +111,15 @@ class MenuController extends Controller {
                 'icon' => $input['icon'],
                 'uri' => $input['uri']
             ]);
+            DB::table(config('admin.database.role_menu_table'))->where('menu_id',$id)->delete();
+            if (isset($input['roles']) && is_array($input['roles'])) {
+                foreach ($input['roles'] as $role) {
+                    DB::table(config('admin.database.role_menu_table'))->insert([
+                        'role_id' => $role,
+                        'menu_id' => $menu->id
+                    ]);
+                }
+            }
         } catch (\Exception $e) {
             return ['status' => 0, 'msg' => $e->getMessage()];
         }
@@ -127,7 +136,7 @@ class MenuController extends Controller {
     public function destroy($id) {
         $menuModel = config('admin.database.menu_model');
         $menuModel::destroy($id);
-        return ['status'=>1,'msg'=>'删除成功'];
+        return ['status' => 1, 'msg' => '删除成功'];
     }
 
     /**

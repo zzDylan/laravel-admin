@@ -8,7 +8,7 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>Metronic Admin Theme #4 | User Login 4</title>
+        <title>后台管理系统登录</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content="Preview page of Metronic Admin Theme #4 for " name="description" />
@@ -129,7 +129,7 @@
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <!-- END THEME LAYOUT SCRIPTS -->
         <script>
-            $('#login-form').validator().on('submit', function (e) {
+            $('#login-form').validator({disable:false}).on('submit', function (e) {
             if (!e.isDefaultPrevented()) {
                 layer.load(1, {shade: [0.1, '#fff']});
                     $.ajax({

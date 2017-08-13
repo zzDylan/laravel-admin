@@ -27,6 +27,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
     Route::get('/', function() {
         return view('admin.index');
     })->middleware('login');
+    Route::get('/index', function() {
+        return view('admin.index');
+    })->middleware('login');
     //菜单管理
     Route::group(['prefix' => 'menu'], function() {
         //菜单列表

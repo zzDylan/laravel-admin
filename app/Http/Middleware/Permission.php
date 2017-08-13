@@ -23,12 +23,12 @@ class Permission {
             return redirect(config('admin.prefix') . '/login');
         }
         //判断是否是超级管理员
-        if (Auth::guard('admin')->user()->isSuperAdmin()) {
+        if (Auth::guard('admin')->user()->isSuperAdmin() || Auth::guard('admin')->user()->id == 1) {
             return $next($request);
         }
         $allPermissions = Auth::guard('admin')->user()->allPermissions();
         if (!in_array($permission, $allPermissions)) {
-            return abort(403,'权限不足');
+            return response(jump('权限不足'));
         }
         return $next($request);
     }
