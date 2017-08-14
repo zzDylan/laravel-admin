@@ -21,7 +21,8 @@ class MenuController extends Controller {
         $roles = $roleModel::all();
         return view('admin.menu.index', [
             'menus' => $menus,
-            'roles' => $roles
+            'roles' => $roles,
+            'title'=>'菜单'
         ]);
     }
 
